@@ -1,0 +1,50 @@
+{
+  "DataBases": [
+    {
+      "sshPort": 1,
+      "instanceName": null,
+      "username": "b",
+      "password": "f",
+      "ip": "db1",
+      "id": "db1",
+      "type": "DataBase",
+      "displayName": "DataBase : db1"
+    }
+  ],
+  "ApplicationServers": [
+    {
+      "servicePort": 3,
+      "description": ",fkf",
+      "repository": "fd",
+      "ip": "AS1",
+      "id": "AS1",
+      "type": "ApplicationServer",
+      "displayName": "ApplicationServer : AS1"
+    }
+  ],
+  "WebServers": [],
+  "PresentationServers": [],
+  "ListOfEdges": [
+    {
+      "machineSource": {
+        "ip": "db1",
+        "id": "db1",
+        "type": "DataBase",
+        "displayName": "DataBase : db1"
+      },
+      "machineTarget": {
+        "ip": "AS1",
+        "id": "AS1",
+        "type": "ApplicationServer",
+        "displayName": "ApplicationServer : AS1"
+      },
+      "protocol": "1",
+      "birectional": false,
+      "portSource": 1,
+      "portTarget": 1,
+      "ipSource": "db1",
+      "ipTarget": "AS1",
+      "firewall": false
+    }
+  ]
+}
