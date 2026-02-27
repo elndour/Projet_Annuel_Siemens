@@ -47,49 +47,67 @@
             edgePortSource = new TextBox();
             edgeProtocol = new TextBox();
             label1 = new Label();
+            Label labelTitleSelection = new Label();
             edgePanel.SuspendLayout();
             newEdgePanel.SuspendLayout();
             SuspendLayout();
             // 
-            // edgePanel
+            // edgePanel (Panneau de Sélection Gauche)
             // 
+            edgePanel.BackColor = Color.FromArgb(240, 242, 245);
+            edgePanel.Controls.Add(labelTitleSelection);
             edgePanel.Controls.Add(edgeButton);
             edgePanel.Controls.Add(targetMachineList);
             edgePanel.Controls.Add(sourceMachineList);
-            edgePanel.Location = new Point(12, 28);
+            edgePanel.Dock = DockStyle.Left; // Prend la moitié gauche
+            edgePanel.Location = new Point(0, 0);
             edgePanel.Name = "edgePanel";
-            edgePanel.Size = new Size(430, 399);
+            edgePanel.Size = new Size(335, 450);
             edgePanel.TabIndex = 0;
             // 
-            // edgeButton
+            // labelTitleSelection
             // 
-            edgeButton.Location = new Point(159, 341);
-            edgeButton.Name = "edgeButton";
-            edgeButton.Size = new Size(121, 39);
-            edgeButton.TabIndex = 2;
-            edgeButton.Text = "Create an edge";
-            edgeButton.UseVisualStyleBackColor = true;
-            edgeButton.Click += edgeButton_Click;
+            labelTitleSelection.AutoSize = true;
+            labelTitleSelection.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelTitleSelection.ForeColor = Color.FromArgb(0, 101, 110);
+            labelTitleSelection.Location = new Point(40, 40);
+            labelTitleSelection.Text = "Machine Selection";
+            // 
+            // sourceMachineList
+            // 
+            sourceMachineList.DropDownStyle = ComboBoxStyle.DropDownList;
+            sourceMachineList.FormattingEnabled = true;
+            sourceMachineList.Location = new Point(40, 100);
+            sourceMachineList.Name = "sourceMachineList";
+            sourceMachineList.Size = new Size(250, 28);
+            sourceMachineList.TabIndex = 0;
             // 
             // targetMachineList
             // 
             targetMachineList.DropDownStyle = ComboBoxStyle.DropDownList;
             targetMachineList.FormattingEnabled = true;
-            targetMachineList.Location = new Point(244, 29);
+            targetMachineList.Location = new Point(40, 160);
             targetMachineList.Name = "targetMachineList";
-            targetMachineList.Size = new Size(151, 28);
+            targetMachineList.Size = new Size(250, 28);
             targetMachineList.TabIndex = 1;
             // 
-            // sourceMachineList
+            // edgeButton
             // 
-            sourceMachineList.FormattingEnabled = true;
-            sourceMachineList.Location = new Point(28, 29);
-            sourceMachineList.Name = "sourceMachineList";
-            sourceMachineList.Size = new Size(151, 28);
-            sourceMachineList.TabIndex = 0;
+            edgeButton.BackColor = Color.FromArgb(0, 101, 110);
+            edgeButton.FlatStyle = FlatStyle.Flat;
+            edgeButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            edgeButton.ForeColor = Color.White;
+            edgeButton.Location = new Point(40, 230);
+            edgeButton.Name = "edgeButton";
+            edgeButton.Size = new Size(250, 40);
+            edgeButton.TabIndex = 2;
+            edgeButton.Text = "Configure Relation";
+            edgeButton.UseVisualStyleBackColor = false;
+            edgeButton.Click += edgeButton_Click;
             // 
-            // newEdgePanel
+            // newEdgePanel (Panneau de Configuration Droite)
             // 
+            newEdgePanel.BackColor = Color.White;
             newEdgePanel.Controls.Add(newEdgeButton);
             newEdgePanel.Controls.Add(edgeHasFirewall);
             newEdgePanel.Controls.Add(edgeIsBirectional);
@@ -104,143 +122,82 @@
             newEdgePanel.Controls.Add(edgePortSource);
             newEdgePanel.Controls.Add(edgeProtocol);
             newEdgePanel.Controls.Add(label1);
-            newEdgePanel.Location = new Point(448, 28);
+            newEdgePanel.Dock = DockStyle.Fill; // Remplit le reste (droite)
+            newEdgePanel.Location = new Point(335, 0);
             newEdgePanel.Name = "newEdgePanel";
-            newEdgePanel.Size = new Size(272, 399);
+            newEdgePanel.Size = new Size(335, 450);
             newEdgePanel.TabIndex = 1;
-            newEdgePanel.Visible = false;
+            newEdgePanel.Visible = false; // Caché par défaut jusqu'au clic
             // 
-            // newEdgeButton
+            // label1 (Titre Info)
             // 
-            newEdgeButton.Location = new Point(54, 367);
-            newEdgeButton.Name = "newEdgeButton";
-            newEdgeButton.Size = new Size(94, 29);
-            newEdgeButton.TabIndex = 13;
-            newEdgeButton.Text = "Confirm";
-            newEdgeButton.UseVisualStyleBackColor = true;
-            newEdgeButton.Click += newEdgeButton_Click;
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(0, 101, 110);
+            label1.Location = new Point(30, 25);
+            label1.Name = "label1";
+            label1.Size = new Size(174, 28);
+            label1.Text = "Edge Properties";
             // 
-            // edgeHasFirewall
+            // Labels (IP/Port)
             // 
-            edgeHasFirewall.AutoSize = true;
-            edgeHasFirewall.Location = new Point(12, 328);
-            edgeHasFirewall.Name = "edgeHasFirewall";
-            edgeHasFirewall.Size = new Size(209, 24);
-            edgeHasFirewall.TabIndex = 12;
-            edgeHasFirewall.Text = "Firewall between machines";
-            edgeHasFirewall.UseVisualStyleBackColor = true;
+            label5.Location = new Point(30, 70); label5.Text = "IP Source:"; label5.AutoSize = true;
+            label6.Location = new Point(30, 110); label6.Text = "IP Target:"; label6.AutoSize = true;
+            label3.Location = new Point(30, 150); label3.Text = "Port Source:"; label3.AutoSize = true;
+            label4.Location = new Point(30, 190); label4.Text = "Port Target:"; label4.AutoSize = true;
+            label2.Location = new Point(30, 230); label2.Text = "Protocol:"; label2.AutoSize = true;
+            // 
+            // TextBoxes
+            // 
+            edgeIPSource.Location = new Point(140, 67); edgeIPSource.Size = new Size(160, 27);
+            edgeIPTarget.Location = new Point(140, 107); edgeIPTarget.Size = new Size(160, 27);
+            edgePortSource.Location = new Point(140, 147); edgePortSource.Size = new Size(160, 27);
+            edgePortTarget.Location = new Point(140, 187); edgePortTarget.Size = new Size(160, 27);
+            edgeProtocol.Location = new Point(140, 227); edgeProtocol.Size = new Size(160, 27);
             // 
             // edgeIsBirectional
             // 
             edgeIsBirectional.AutoSize = true;
-            edgeIsBirectional.Location = new Point(12, 298);
+            edgeIsBirectional.Location = new Point(30, 275);
             edgeIsBirectional.Name = "edgeIsBirectional";
             edgeIsBirectional.Size = new Size(170, 24);
-            edgeIsBirectional.TabIndex = 11;
             edgeIsBirectional.Text = "Bidirectional relation";
-            edgeIsBirectional.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // edgeHasFirewall
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(12, 100);
-            label6.Name = "label6";
-            label6.Size = new Size(62, 20);
-            label6.TabIndex = 10;
-            label6.Text = "IPTarget";
+            edgeHasFirewall.AutoSize = true;
+            edgeHasFirewall.Location = new Point(30, 305);
+            edgeHasFirewall.Name = "edgeHasFirewall";
+            edgeHasFirewall.Size = new Size(209, 24);
+            edgeHasFirewall.Text = "Firewall protection";
             // 
-            // label5
+            // newEdgeButton (Confirm)
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(12, 55);
-            label5.Name = "label5";
-            label5.Size = new Size(66, 20);
-            label5.TabIndex = 9;
-            label5.Text = "IPSource";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(12, 196);
-            label4.Name = "label4";
-            label4.Size = new Size(76, 20);
-            label4.TabIndex = 8;
-            label4.Text = "PortTarget";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(12, 147);
-            label3.Name = "label3";
-            label3.Size = new Size(80, 20);
-            label3.TabIndex = 7;
-            label3.Text = "PortSource";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(12, 247);
-            label2.Name = "label2";
-            label2.Size = new Size(65, 20);
-            label2.TabIndex = 6;
-            label2.Text = "Protocol";
-            // 
-            // edgeIPTarget
-            // 
-            edgeIPTarget.Location = new Point(98, 100);
-            edgeIPTarget.Name = "edgeIPTarget";
-            edgeIPTarget.Size = new Size(125, 27);
-            edgeIPTarget.TabIndex = 5;
-            // 
-            // edgePortTarget
-            // 
-            edgePortTarget.Location = new Point(98, 196);
-            edgePortTarget.Name = "edgePortTarget";
-            edgePortTarget.Size = new Size(125, 27);
-            edgePortTarget.TabIndex = 4;
-            // 
-            // edgeIPSource
-            // 
-            edgeIPSource.Location = new Point(98, 52);
-            edgeIPSource.Name = "edgeIPSource";
-            edgeIPSource.Size = new Size(125, 27);
-            edgeIPSource.TabIndex = 3;
-            edgeIPSource.Text = "\r\n";
-            // 
-            // edgePortSource
-            // 
-            edgePortSource.Location = new Point(98, 147);
-            edgePortSource.Name = "edgePortSource";
-            edgePortSource.Size = new Size(125, 27);
-            edgePortSource.TabIndex = 2;
-            // 
-            // edgeProtocol
-            // 
-            edgeProtocol.Location = new Point(98, 244);
-            edgeProtocol.Name = "edgeProtocol";
-            edgeProtocol.Size = new Size(125, 27);
-            edgeProtocol.TabIndex = 1;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(45, 14);
-            label1.Name = "label1";
-            label1.Size = new Size(125, 20);
-            label1.TabIndex = 0;
-            label1.Text = "Edge Information";
+            newEdgeButton.BackColor = Color.FromArgb(0, 101, 110);
+            newEdgeButton.FlatStyle = FlatStyle.Flat;
+            newEdgeButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            newEdgeButton.ForeColor = Color.White;
+            newEdgeButton.Location = new Point(30, 350);
+            newEdgeButton.Name = "newEdgeButton";
+            newEdgeButton.Size = new Size(270, 40);
+            newEdgeButton.TabIndex = 13;
+            newEdgeButton.Text = "Confirm and Add";
+            newEdgeButton.UseVisualStyleBackColor = false;
+            newEdgeButton.Click += newEdgeButton_Click;
             // 
             // FormEdge
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            BackColor = Color.White;
+            ClientSize = new Size(670, 450);
             Controls.Add(newEdgePanel);
             Controls.Add(edgePanel);
             FormBorderStyle = FormBorderStyle.None;
             Name = "FormEdge";
-            Text = "FormEdge";
+            Text = "Network Edge Configuration";
             edgePanel.ResumeLayout(false);
+            edgePanel.PerformLayout();
             newEdgePanel.ResumeLayout(false);
             newEdgePanel.PerformLayout();
             ResumeLayout(false);

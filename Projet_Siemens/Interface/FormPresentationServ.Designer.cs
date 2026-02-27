@@ -2,15 +2,8 @@
 {
     partial class FormPresentationServ
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,13 +15,11 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             presServPanel = new Panel();
+            presServRepositoryText = new TextBox();
+            label5 = new Label();
             presServIDText = new TextBox();
             ID = new Label();
             presServIPText = new TextBox();
@@ -39,13 +30,14 @@
             presServURLText = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            presServRepositoryText = new TextBox();
-            label5 = new Label();
             presServPanel.SuspendLayout();
             SuspendLayout();
             // 
             // presServPanel
             // 
+            // Anchor.None + calcul de position permet de garder le panel au centre
+            presServPanel.Anchor = AnchorStyles.None; 
+            presServPanel.BackColor = Color.White; // Fond blanc pour détacher du gris
             presServPanel.Controls.Add(presServRepositoryText);
             presServPanel.Controls.Add(label5);
             presServPanel.Controls.Add(presServIDText);
@@ -58,10 +50,21 @@
             presServPanel.Controls.Add(presServURLText);
             presServPanel.Controls.Add(label2);
             presServPanel.Controls.Add(label1);
-            presServPanel.Location = new Point(167, 69);
+            presServPanel.Location = new Point(167, 45);
             presServPanel.Name = "presServPanel";
-            presServPanel.Size = new Size(467, 340);
+            presServPanel.Size = new Size(467, 360);
             presServPanel.TabIndex = 2;
+            // 
+            // label1 (Titre du formulaire)
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(0, 101, 110); // Bleu Siemens
+            label1.Location = new Point(138, 10);
+            label1.Name = "label1";
+            label1.Size = new Size(191, 28);
+            label1.TabIndex = 0;
+            label1.Text = "Presentation Server";
             // 
             // presServIDText
             // 
@@ -73,7 +76,7 @@
             // ID
             // 
             ID.AutoSize = true;
-            ID.Location = new Point(95, 63);
+            ID.Location = new Point(68, 63);
             ID.Name = "ID";
             ID.Size = new Size(24, 20);
             ID.TabIndex = 8;
@@ -91,19 +94,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(68, 104);
             label4.Name = "label4";
-            label4.Size = new Size(69, 20);
+            label4.Size = new Size(76, 20);
             label4.TabIndex = 6;
-            label4.Text = "IP Adress";
-            // 
-            // newPresServButton
-            // 
-            newPresServButton.Location = new Point(207, 303);
-            newPresServButton.Name = "newPresServButton";
-            newPresServButton.Size = new Size(94, 29);
-            newPresServButton.TabIndex = 5;
-            newPresServButton.Text = "Submit";
-            newPresServButton.UseVisualStyleBackColor = true;
-            newPresServButton.Click += newPresServButton_Click;
+            label4.Text = "IP Address";
             // 
             // presServPortText
             // 
@@ -115,7 +108,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(81, 152);
+            label3.Location = new Point(68, 152);
             label3.Name = "label3";
             label3.Size = new Size(35, 20);
             label3.TabIndex = 3;
@@ -131,20 +124,11 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(77, 202);
+            label2.Location = new Point(68, 202);
             label2.Name = "label2";
             label2.Size = new Size(35, 20);
             label2.TabIndex = 1;
             label2.Text = "URL";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(192, 17);
-            label1.Name = "label1";
-            label1.Size = new Size(136, 20);
-            label1.TabIndex = 0;
-            label1.Text = "Presentation Server";
             // 
             // presServRepositoryText
             // 
@@ -162,10 +146,25 @@
             label5.TabIndex = 11;
             label5.Text = "Repository";
             // 
+            // newPresServButton (Style Siemens)
+            // 
+            newPresServButton.BackColor = Color.FromArgb(0, 101, 110);
+            newPresServButton.FlatStyle = FlatStyle.Flat;
+            newPresServButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            newPresServButton.ForeColor = Color.White;
+            newPresServButton.Location = new Point(176, 305);
+            newPresServButton.Name = "newPresServButton";
+            newPresServButton.Size = new Size(236, 35);
+            newPresServButton.TabIndex = 5;
+            newPresServButton.Text = "SUBMIT";
+            newPresServButton.UseVisualStyleBackColor = false;
+            newPresServButton.Click += newPresServButton_Click;
+            // 
             // FormPresentationServ
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.WhiteSmoke;
             ClientSize = new Size(800, 450);
             Controls.Add(presServPanel);
             FormBorderStyle = FormBorderStyle.None;

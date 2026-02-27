@@ -19,6 +19,7 @@ namespace Projet_Siemens.Class
         public List<Presentation_Server> presentationServers { get; set; }
         public List<Machine> machines { get; set; }
         public List<Edge> listOfEdges { get; set; }
+        public List<SubNetwork> subNetworks { get; set; }
 
         public Network()
         {
@@ -28,6 +29,7 @@ namespace Projet_Siemens.Class
             presentationServers = new List<Presentation_Server>();
             listOfEdges = new List<Edge>();
             machines = new List<Machine>();
+            subNetworks = new List<SubNetwork>();
         }
 
         public void addDataBase(DataBase dataBase)
@@ -104,6 +106,22 @@ namespace Projet_Siemens.Class
         public void removeMachine(Machine machine)
         {
             machines.Remove(machine);
+        }
+
+        // SubNetwork management methods
+        public void addSubNetwork(SubNetwork subNetwork)
+        {
+            subNetworks.Add(subNetwork);
+        }
+
+        public void removeSubNetwork(SubNetwork subNetwork)
+        {
+            subNetworks.Remove(subNetwork);
+        }
+
+        public SubNetwork GetSubNetworkByMachine(Machine machine)
+        {
+            return subNetworks.FirstOrDefault(sn => sn.ContainsMachine(machine));
         }
 
         public void SaveMachinesToJson()

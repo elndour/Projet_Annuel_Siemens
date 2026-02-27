@@ -35,9 +35,7 @@
             btnvisu = new Button();
             btnconfig = new Button();
             panelheader = new Panel();
-            btnclose = new Button();
-            btnmaximize = new Button();
-            btnminimize = new Button();
+            //btnclose = new Button();
             menuStrip1 = new MenuStrip();
             fichierToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
@@ -133,9 +131,7 @@
             // panelheader
             // 
             panelheader.BackColor = Color.Gray;
-            panelheader.Controls.Add(btnminimize);
-            panelheader.Controls.Add(btnmaximize);
-            panelheader.Controls.Add(btnclose);
+            //panelheader.Controls.Add(btnclose);
             panelheader.Controls.Add(menuStrip1);
             panelheader.Dock = DockStyle.Top;
             panelheader.Location = new Point(0, 0);
@@ -146,54 +142,18 @@
             // 
             // btnclose
             // 
-            btnclose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnclose.BackColor = Color.Gray;
+            /*btnclose.BackColor = Color.Gray;
             btnclose.FlatStyle = FlatStyle.Flat;
             btnclose.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnclose.ForeColor = Color.White;
-            btnclose.Location = new Point(1341, 0);
+            btnclose.ImageAlign = ContentAlignment.MiddleLeft;
+            btnclose.Location = new Point(1356, 0);
             btnclose.Name = "btnclose";
-            btnclose.Size = new Size(45, 30);
+            btnclose.Size = new Size(30, 30);
             btnclose.TabIndex = 4;
             btnclose.Text = "X";
             btnclose.UseVisualStyleBackColor = false;
-            btnclose.Click += btnclose_Click;
-            btnclose.MouseEnter += btnclose_MouseEnter;
-            btnclose.MouseLeave += btnclose_MouseLeave;
-            // 
-            // btnmaximize
-            // 
-            btnmaximize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnmaximize.BackColor = Color.Gray;
-            btnmaximize.FlatStyle = FlatStyle.Flat;
-            btnmaximize.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnmaximize.ForeColor = Color.White;
-            btnmaximize.Location = new Point(1296, 0);
-            btnmaximize.Name = "btnmaximize";
-            btnmaximize.Size = new Size(45, 30);
-            btnmaximize.TabIndex = 6;
-            btnmaximize.Text = "□";
-            btnmaximize.UseVisualStyleBackColor = false;
-            btnmaximize.Click += btnmaximize_Click;
-            btnmaximize.MouseEnter += btnmaximize_MouseEnter;
-            btnmaximize.MouseLeave += btnmaximize_MouseLeave;
-            // 
-            // btnminimize
-            // 
-            btnminimize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnminimize.BackColor = Color.Gray;
-            btnminimize.FlatStyle = FlatStyle.Flat;
-            btnminimize.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnminimize.ForeColor = Color.White;
-            btnminimize.Location = new Point(1251, 0);
-            btnminimize.Name = "btnminimize";
-            btnminimize.Size = new Size(45, 30);
-            btnminimize.TabIndex = 7;
-            btnminimize.Text = "_";
-            btnminimize.UseVisualStyleBackColor = false;
-            btnminimize.Click += btnminimize_Click;
-            btnminimize.MouseEnter += btnminimize_MouseEnter;
-            btnminimize.MouseLeave += btnminimize_MouseLeave;
+            btnclose.Click += btnclose_Click;*/
             // 
             // menuStrip1
             // 
@@ -326,9 +286,7 @@
         private Button button3;
         private Button btnvisu;
         private PictureBox pictureBox1;
-        private Button btnclose;
-        private Button btnmaximize;
-        private Button btnminimize;
+        //private Button btnclose;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fichierToolStripMenuItem;
         private ToolStripMenuItem openToolStripMenuItem;

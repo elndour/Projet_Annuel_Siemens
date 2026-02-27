@@ -62,52 +62,5 @@ namespace Projet_Siemens
         {
 
         }
-
-        private void btnclose_MouseEnter(object sender, EventArgs e)
-        {
-            btnclose.BackColor = Color.Red;
-        }
-
-        private void btnclose_MouseLeave(object sender, EventArgs e)
-        {
-            btnclose.BackColor = Color.Gray;
-        }
-
-        private void btnmaximize_Click(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                this.WindowState = FormWindowState.Maximized;
-            }
-            else
-            {
-                this.WindowState = FormWindowState.Normal;
-            }
-        }
-
-        private void btnmaximize_MouseEnter(object sender, EventArgs e)
-        {
-            btnmaximize.BackColor = Color.DarkGray;
-        }
-
-        private void btnmaximize_MouseLeave(object sender, EventArgs e)
-        {
-            btnmaximize.BackColor = Color.Gray;
-        }
-
-        private void btnminimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void btnminimize_MouseEnter(object sender, EventArgs e)
-        {
-            btnminimize.BackColor = Color.DarkGray;
-        }
-
-        private void btnminimize_MouseLeave(object sender, EventArgs e)
-        {
-            btnminimize.BackColor = Color.Gray;
-        }
     }
 }
