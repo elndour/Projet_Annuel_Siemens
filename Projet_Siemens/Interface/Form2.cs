@@ -318,6 +318,237 @@ namespace Projet_Siemens
             loadform(new FormFileExtraction(this));
         }
 
+        private void testMockButton_Click(object sender, EventArgs e)
+        {
+            // Menu de choix des tests
+            var testForm = new Form
+            {
+                Text = "🧪 Tests de collecte de données",
+                Size = new Size(500, 400),
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            var label = new System.Windows.Forms.Label
+            {
+                Text = "Choisissez le type de test à exécuter :",
+                Location = new Point(20, 20),
+                Size = new Size(450, 30),
+                Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold)
+            };
+
+            var btnMockTest = new Button
+            {
+                Text = "📝 Test Mock (Simulation sans BDD)",
+                Location = new Point(20, 60),
+                Size = new Size(440, 50),
+                BackColor = System.Drawing.Color.FromArgb(0, 122, 204),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            var btnCreateSQLite = new Button
+            {
+                Text = "🗄️ Créer une base SQLite de test",
+                Location = new Point(20, 120),
+                Size = new Size(440, 50),
+                BackColor = System.Drawing.Color.FromArgb(0, 153, 76),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            var btnExtractSQLite = new Button
+            {
+                Text = "📊 Extraire les données SQLite",
+                Location = new Point(20, 180),
+                Size = new Size(440, 50),
+                BackColor = System.Drawing.Color.FromArgb(230, 126, 34),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            var btnMockSSH = new Button
+            {
+                Text = "🔧 Test Mock SSH/SFTP",
+                Location = new Point(20, 240),
+                Size = new Size(440, 50),
+                BackColor = System.Drawing.Color.FromArgb(155, 89, 182),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            var btnClose = new Button
+            {
+                Text = "Fermer",
+                Location = new Point(20, 300),
+                Size = new Size(440, 40),
+                BackColor = System.Drawing.Color.FromArgb(127, 140, 141),
+                ForeColor = System.Drawing.Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            btnMockTest.Click += (s, ev) =>
+            {
+                testForm.Close();
+                try
+                {
+                    Test.DatabaseHelperTester.RunAllTests();
+
+                    string testDir = Path.Combine(
+                        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName,
+                        "Data", "test-mock", "database_results"
+                    );
+
+                    if (Directory.Exists(testDir))
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", testDir);
+                        MessageBox.Show(
+                            "✅ Tests mock exécutés avec succès !\n\n" +
+                            "Fichiers créés dans Data/test-mock/database_results/\n" +
+                            "✓ test_production_orders.json\n" +
+                            "✓ extraction_report.json",
+                            "Tests réussis !",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            btnCreateSQLite.Click += (s, ev) =>
+            {
+                testForm.Close();
+                try
+                {
+                    var creator = new Test.SQLiteTestDatabaseCreator();
+                    string dbPath = creator.CreateTestDatabase();
+
+                    if (!string.IsNullOrEmpty(dbPath))
+                    {
+                        string stats = creator.GetDatabaseStats();
+                        MessageBox.Show(stats, "Base SQLite créée", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Proposer d'ouvrir le dossier
+                        System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(dbPath));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            btnExtractSQLite.Click += (s, ev) =>
+            {
+                testForm.Close();
+                try
+                {
+                    // Chercher la base SQLite
+                    string dataFolder = Path.Combine(
+                        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName,
+                        "Data"
+                    );
+                    string dbPath = Path.Combine(dataFolder, "mes_test.db");
+
+                    if (!File.Exists(dbPath))
+                    {
+                        MessageBox.Show(
+                            "❌ Base de données SQLite introuvable !\n\n" +
+                            "Veuillez d'abord créer la base avec l'option :\n" +
+                            "🗄️ Créer une base SQLite de test",
+                            "Erreur",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                        return;
+                    }
+
+                    // Lancer l'extraction
+                    var extractor = new Test.SQLiteDataExtractor(dbPath);
+                    var report = extractor.ExecuteFullExtraction(dataFolder);
+
+                    // Afficher le rapport
+                    var reportText = $"========== RAPPORT D'EXTRACTION SQLite ==========\n\n" +
+                                   $"Base : {report.DatabaseId}\n" +
+                                   $"Durée : {report.TotalDuration.TotalSeconds:F2}s\n\n" +
+                                   $"Requêtes totales : {report.TotalQueries}\n" +
+                                   $"✓ Réussies : {report.SuccessfulQueries}\n" +
+                                   $"✗ Échouées : {report.FailedQueries}\n\n" +
+                                   "Fichiers créés :\n";
+
+                    foreach (var query in report.Queries)
+                    {
+                        string status = query.Success ? "✓" : "✗";
+                        reportText += $"{status} {query.OutputFile}\n";
+                    }
+
+                    MessageBox.Show(reportText, "Extraction terminée", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Ouvrir le dossier des résultats
+                    string resultsDir = Path.Combine(dataFolder, "sqlite-test-db", "database_results");
+                    System.Diagnostics.Process.Start("explorer.exe", resultsDir);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"❌ Erreur : {ex.Message}\n\n{ex.StackTrace}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            btnMockSSH.Click += (s, ev) =>
+            {
+                testForm.Close();
+                try
+                {
+                    // Vérifier qu'il y a au moins un serveur
+                    var servers = network.machines.Where(m => m.type != "DataBase").ToList();
+
+                    if (servers.Count == 0)
+                    {
+                        MessageBox.Show(
+                            "Aucun serveur trouvé !\n\n" +
+                            "Créez d'abord un serveur (App Server, Web Server ou Presentation Server) " +
+                            "via le drag & drop.",
+                            "Erreur",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        return;
+                    }
+
+                    // Prendre le premier serveur
+                    var server = servers.First();
+
+                    // Simuler la collecte
+                    string baseDir = Path.Combine(
+                        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName,
+                        "Data"
+                    );
+
+                    Test.MockSSHCollector.SimulateFileCollection(server, baseDir);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            btnClose.Click += (s, ev) => testForm.Close();
+
+            testForm.Controls.Add(label);
+            testForm.Controls.Add(btnMockTest);
+            testForm.Controls.Add(btnCreateSQLite);
+            testForm.Controls.Add(btnExtractSQLite);
+            testForm.Controls.Add(btnMockSSH);
+            testForm.Controls.Add(btnClose);
+            testForm.ShowDialog();
+        }
+
         // ========== DRAG & DROP FUNCTIONALITY ==========
 
         private void DragButton_MouseDown(object sender, MouseEventArgs e)

@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "queryName": "Inventory Levels",
+    "extractionDate": "2026-02-27 22:10:35",
+    "database": "SQLite MES Test",
+    "server": "Local File",
+    "rowCount": 3,
+    "columnCount": 9,
+    "columns": [
+      "material_id",
+      "material_name",
+      "material_type",
+      "current_quantity",
+      "min_quantity",
+      "max_quantity",
+      "unit_of_measure",
+      "last_updated",
+      "warehouse_location"
+    ]
+  },
+  "data": [
+    {
+      "material_id": "MAT-001",
+      "material_name": "Steel Sheet 2mm",
+      "material_type": "RAW_MATERIAL",
+      "current_quantity": 50,
+      "min_quantity": 100,
+      "max_quantity": 500,
+      "unit_of_measure": "KG",
+      "last_updated": "2026-02-27 21:07:07",
+      "warehouse_location": "WAREHOUSE-A"
+    },
+    {
+      "material_id": "MAT-002",
+      "material_name": "Aluminum Rod 10mm",
+      "material_type": "RAW_MATERIAL",
+      "current_quantity": 80,
+      "min_quantity": 150,
+      "max_quantity": 600,
+      "unit_of_measure": "METERS",
+      "last_updated": "2026-02-27 21:07:07",
+      "warehouse_location": "WAREHOUSE-B"
+    },
+    {
+      "material_id": "MAT-003",
+      "material_name": "Plastic Pellets",
+      "material_type": "RAW_MATERIAL",
+      "current_quantity": 120,
+      "min_quantity": 100,
+      "max_quantity": 400,
+      "unit_of_measure": "KG",
+      "last_updated": "2026-02-27 21:07:07",
+      "warehouse_location": "WAREHOUSE-A"
+    }
+  ]
+}

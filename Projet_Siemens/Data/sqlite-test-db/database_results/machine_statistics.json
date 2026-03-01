@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "queryName": "Machine Statistics",
+    "extractionDate": "2026-02-27 22:10:35",
+    "database": "SQLite MES Test",
+    "server": "Local File",
+    "rowCount": 5,
+    "columnCount": 9,
+    "columns": [
+      "machine_id",
+      "machine_name",
+      "total_operations",
+      "avg_processing_time",
+      "min_processing_time",
+      "max_processing_time",
+      "success_count",
+      "failed_count",
+      "warning_count"
+    ]
+  },
+  "data": [
+    {
+      "machine_id": "MACHINE-0",
+      "machine_name": "Machine 0",
+      "total_operations": 4,
+      "avg_processing_time": 112.5,
+      "min_processing_time": 80,
+      "max_processing_time": 145,
+      "success_count": 3,
+      "failed_count": 1,
+      "warning_count": 0
+    },
+    {
+      "machine_id": "MACHINE-1",
+      "machine_name": "Machine 1",
+      "total_operations": 4,
+      "avg_processing_time": 85.5,
+      "min_processing_time": 58,
+      "max_processing_time": 128,
+      "success_count": 3,
+      "failed_count": 1,
+      "warning_count": 0
+    },
+    {
+      "machine_id": "MACHINE-2",
+      "machine_name": "Machine 2",
+      "total_operations": 4,
+      "avg_processing_time": 98.5,
+      "min_processing_time": 71,
+      "max_processing_time": 141,
+      "success_count": 2,
+      "failed_count": 1,
+      "warning_count": 1
+    },
+    {
+      "machine_id": "MACHINE-3",
+      "machine_name": "Machine 3",
+      "total_operations": 4,
+      "avg_processing_time": 86.5,
+      "min_processing_time": 54,
+      "max_processing_time": 119,
+      "success_count": 3,
+      "failed_count": 1,
+      "warning_count": 0
+    },
+    {
+      "machine_id": "MACHINE-4",
+      "machine_name": "Machine 4",
+      "total_operations": 4,
+      "avg_processing_time": 99.5,
+      "min_processing_time": 67,
+      "max_processing_time": 132,
+      "success_count": 2,
+      "failed_count": 1,
+      "warning_count": 1
+    }
+  ]
+}

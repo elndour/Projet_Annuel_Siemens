@@ -1,0 +1,248 @@
+═══════════════════════════════════════════════════════════════════════════════
+                     CHANGELOG - PROJET MES SIEMENS
+                         DATE : 09 JANVIER 2025
+           DÉVELOPPEURS : SEKOU, MOHAMED, VICTOR, EL HADJI
+═══════════════════════════════════════════════════════════════════════════════
+
+RÉSUMÉ EXÉCUTIF
+═══════════════════════════════════════════════════════════════════════════════
+Progression globale : 60% → 85% (+25%)
+
+Fonctionnalités ajoutées :
+✅ Collecte SSH/SFTP complète (100%)
+✅ Packaging ZIP (100%)
+✅ Cryptage AES-256 (100%)
+✅ Tests automatisés (Mock SSH, SQLite)
+
+Code ajouté :
+- 15 nouveaux fichiers
+- ~2500 lignes de code
+- 4 packages NuGet
+
+🚀 Le projet est maintenant livrable à 85%
+Reste : Documentation (3-4 jours) + PostgreSQL optionnel (2 jours)
+
+═══════════════════════════════════════════════════════════════════════════════
+NOUVELLES FONCTIONNALITÉS MAJEURES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. COLLECTE SSH/SFTP (802 lignes)
+   - SSHHelper.cs : Connexion SSH, commandes distantes, infos système
+   - SFTPHelper.cs : Téléchargement SFTP, support .log/.xml/.config/.nfo
+   - FileCollector.cs : Orchestrateur SSH+SFTP, collecte automatique
+   - SSHCredentialsForm.cs : Interface de saisie credentials
+   
+   Package ajouté : SSH.NET (Renci.SshNet)
+
+2. PACKAGING & CRYPTAGE (657 lignes)
+   - ZipPackager.cs : Compression ZIP avec statistiques
+   - AESEncryption.cs : Cryptage AES-256-CBC, PBKDF2, SHA-256
+   - SecurePackageManager.cs : Workflow ZIP→Cryptage→Rapport
+   
+   Sécurité : AES-256, Salt 32 bytes, IV 16 bytes, 10,000 itérations
+
+3. TESTS AUTOMATISÉS (491 lignes)
+   - SQLiteTestDatabaseCreator.cs : Création base SQLite de test
+   - SQLiteDataExtractor.cs : Extraction depuis SQLite
+   - MockSSHCollector.cs : Simulation collecte SSH
+   
+   Package ajouté : Microsoft.Data.Sqlite
+
+4. INTERFACE UTILISATEUR
+   - Bouton 🧪 TEST avec 4 options
+   - Bouton 📦 Package & Encrypt
+   - Détection automatique des répertoires de données
+
+═══════════════════════════════════════════════════════════════════════════════
+FICHIERS CRÉÉS (15 NOUVEAUX)
+═══════════════════════════════════════════════════════════════════════════════
+
+SSH/ (4 fichiers)
+├─ SSHHelper.cs                      178 lignes
+├─ SFTPHelper.cs                     224 lignes
+├─ FileCollector.cs                  276 lignes
+└─ SSHCredentialsForm.cs             124 lignes
+
+Security/ (3 fichiers)
+├─ ZipPackager.cs                    210 lignes
+├─ AESEncryption.cs                  278 lignes
+└─ SecurePackageManager.cs           169 lignes
+
+Test/ (3 fichiers)
+├─ SQLiteTestDatabaseCreator.cs      170 lignes
+├─ SQLiteDataExtractor.cs            208 lignes
+└─ MockSSHCollector.cs               113 lignes
+
+Data/ (3 fichiers SQL)
+├─ test_database_setup.sql           450 lignes (Oracle)
+├─ create_sqlite_test_db.sql         200 lignes (SQLite)
+└─ mes_queries_config.sql            (Existant)
+
+═══════════════════════════════════════════════════════════════════════════════
+FICHIERS MODIFIÉS (7 FICHIERS)
+═══════════════════════════════════════════════════════════════════════════════
+
+✏️ Form2.cs
+   - Ajout testMockButton_Click() (150 lignes)
+   - Menu modal de tests
+
+✏️ Form2.Designer.cs
+   - Ajout bouton testMockButton
+
+✏️ FormFileExtraction.cs
+   - Ajout ExtractServerFiles() (120 lignes)
+   - Ajout packageButton_Click() (140 lignes)
+   - Ajout DetectDataDirectories() (60 lignes)
+
+✏️ FormFileExtraction.Designer.cs
+   - Ajout bouton packageButton
+
+✏️ Projet_Siemens.csproj
+   - Ajout SSH.NET
+   - Ajout Microsoft.Data.Sqlite
+
+═══════════════════════════════════════════════════════════════════════════════
+CORRECTIONS DE BUGS
+═══════════════════════════════════════════════════════════════════════════════
+
+BUG #1 : NullReferenceException dans FormFileExtraction
+   Problème : packageButton non instancié
+   Solution : Ajout packageButton = new Button()
+   Statut   : ✅ RÉSOLU
+
+BUG #2 : Type mismatch dans SFTPHelper
+   Problème : List<SftpFile> vs List<ISftpFile>
+   Solution : Changement en ISftpFile
+   Statut   : ✅ RÉSOLU
+
+BUG #3 : sqlite-test-db non visible
+   Problème : Données de test non listées
+   Solution : Ajout DetectDataDirectories()
+   Statut   : ✅ RÉSOLU
+
+═══════════════════════════════════════════════════════════════════════════════
+TESTS AJOUTÉS
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Test Mock BDD           : ✅ PASS - 2 fichiers JSON créés
+✅ Création base SQLite    : ✅ PASS - 41 lignes insérées
+✅ Extraction SQLite       : ✅ PASS - 7/7 requêtes réussies
+✅ Mock SSH/SFTP           : ✅ PASS - 5 fichiers simulés
+✅ Packaging ZIP           : ✅ PASS - Compression ~65%
+✅ Cryptage AES-256        : ✅ PASS - Hash SHA-256 validé
+✅ Package complet         : ✅ PASS - .zip.enc créé
+
+═══════════════════════════════════════════════════════════════════════════════
+STATISTIQUES DU CODE
+═══════════════════════════════════════════════════════════════════════════════
+
+AVANT (08/01/2025) :
+   Fichiers : 12
+   Lignes   : ~2080
+   Packages : 2
+   Complété : 60%
+
+APRÈS (09/01/2025) :
+   Fichiers : 27 (+15)
+   Lignes   : ~4580 (+2500)
+   Packages : 4 (+2)
+   Complété : 85% (+25%)
+
+RÉPARTITION :
+   Interface    : 8 fichiers   ~1500 lignes   100% ✅
+   Classes      : 6 fichiers    ~800 lignes   100% ✅
+   BDD          : 3 fichiers    ~600 lignes    90% ⚠️
+   SSH/SFTP     : 4 fichiers    ~800 lignes   100% ✅
+   Security     : 3 fichiers    ~660 lignes   100% ✅
+   Tests        : 4 fichiers    ~550 lignes   100% ✅
+   SQL          : 3 fichiers    ~670 lignes   100% ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+ÉTAT D'AVANCEMENT
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Interface graphique       ████████████  100%
+2A. Collecte BDD Oracle      ██████████░░   90%
+2B. Collecte SSH/SFTP        ████████████  100% ⭐
+3. Packaging & Cryptage      ████████████  100% ⭐
+4. Tests & Validation        ██████░░░░░░   50%
+5. Documentation             ░░░░░░░░░░░░    0%
+
+GLOBAL                       ██████████░░   85%
+
+═══════════════════════════════════════════════════════════════════════════════
+PROCHAINES ÉTAPES (10-17 JANVIER 2025)
+═══════════════════════════════════════════════════════════════════════════════
+
+Jour 1-2 : Documentation technique
+   - README.md complet
+   - Diagrammes UML (classes, séquences)
+   - Architecture MVC
+
+Jour 3-4 : Documentation utilisateur
+   - Manuel d'utilisation
+   - Guide d'installation
+   - Screenshots
+
+Jour 5 : Finalisations
+   - Support PostgreSQL (optionnel)
+   - Tests finaux
+   - Préparation présentation
+
+LIVRAISON ESTIMÉE : 17 JANVIER 2025
+
+═══════════════════════════════════════════════════════════════════════════════
+CONFORMITÉ LETTRE DE MISSION
+═══════════════════════════════════════════════════════════════════════════════
+
+Représentation graphique : ✅ 100% COMPLET
+Collecte de données      : ✅  95% COMPLET (PostgreSQL manquant)
+Sécurisation             : ✅ 100% COMPLET
+Documentation            : ❌   0% À FAIRE
+
+═══════════════════════════════════════════════════════════════════════════════
+PACKAGES NUGET
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Microsoft.Msagl
+✅ Oracle.ManagedDataAccess
+✅ Microsoft.Data.Sqlite          (NOUVEAU)
+✅ SSH.NET (Renci.SshNet)         (NOUVEAU)
+
+═══════════════════════════════════════════════════════════════════════════════
+NOTES IMPORTANTES
+═══════════════════════════════════════════════════════════════════════════════
+
+AVERTISSEMENTS :
+⚠️ Oracle.ManagedDataAccess : Warning NU1701 (compatible mais legacy)
+⚠️ PostgreSQL non implémenté (optionnel - 2 jours)
+⚠️ Credentials SSH en clair (utiliser SecureString en production)
+
+RECOMMANDATIONS :
+💡 Ajouter fichier .env pour credentials
+💡 Implémenter système de logs détaillés
+💡 Ajouter barre de progression
+💡 Tests unitaires xUnit/NUnit
+💡 CI/CD GitHub Actions
+
+═══════════════════════════════════════════════════════════════════════════════
+ÉQUIPE & TECHNOLOGIES
+═══════════════════════════════════════════════════════════════════════════════
+
+Équipe :
+├─ SEKOU      : SSH/SFTP, FileCollector
+├─ MOHAMED    : Packaging ZIP, Cryptage AES
+├─ VICTOR     : Tests, Documentation SQL
+└─ EL HADJI   : Coordination, Tests SQLite
+
+Technologies :
+├─ .NET 8.0
+├─ C# 12.0
+├─ Windows Forms
+├─ Visual Studio 2026 Insiders
+└─ Git + GitHub
+
+═══════════════════════════════════════════════════════════════════════════════
+FIN DU CHANGELOG - 09 JANVIER 2025
+═══════════════════════════════════════════════════════════════════════════════
+GitHub : https://github.com/elndour/Projet_Annuel_Siemens

@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "queryName": "Error Logs",
+    "extractionDate": "2026-02-27 22:10:35",
+    "database": "SQLite MES Test",
+    "server": "Local File",
+    "rowCount": 5,
+    "columnCount": 7,
+    "columns": [
+      "error_id",
+      "error_code",
+      "error_message",
+      "error_timestamp",
+      "module_name",
+      "severity_level",
+      "stack_trace"
+    ]
+  },
+  "data": [
+    {
+      "error_id": 1,
+      "error_code": "ERR-500",
+      "error_message": "Database connection timeout",
+      "error_timestamp": "2025-01-08 14:23:00",
+      "module_name": "DatabaseModule",
+      "severity_level": "CRITICAL",
+      "stack_trace": "Exception at line 245"
+    },
+    {
+      "error_id": 2,
+      "error_code": "ERR-404",
+      "error_message": "Resource not found",
+      "error_timestamp": "2025-01-08 10:15:00",
+      "module_name": "FileHandler",
+      "severity_level": "ERROR",
+      "stack_trace": "FileNotFoundException"
+    },
+    {
+      "error_id": 3,
+      "error_code": "ERR-301",
+      "error_message": "Machine communication failed",
+      "error_timestamp": "2025-01-07 16:40:00",
+      "module_name": "PLCInterface",
+      "severity_level": "CRITICAL",
+      "stack_trace": "TimeoutException"
+    },
+    {
+      "error_id": 4,
+      "error_code": "ERR-200",
+      "error_message": "Invalid parameter",
+      "error_timestamp": "2025-01-07 11:30:00",
+      "module_name": "ValidationModule",
+      "severity_level": "ERROR",
+      "stack_trace": "ArgumentException"
+    },
+    {
+      "error_id": 5,
+      "error_code": "ERR-101",
+      "error_message": "Low memory warning",
+      "error_timestamp": "2025-01-06 09:20:00",
+      "module_name": "SystemMonitor",
+      "severity_level": "WARNING",
+      "stack_trace": "MemoryException"
+    }
+  ]
+}

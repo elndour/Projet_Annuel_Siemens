@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "queryName": "MES Tasks",
+    "extractionDate": "2026-02-27 22:10:35",
+    "database": "SQLite MES Test",
+    "server": "Local File",
+    "rowCount": 3,
+    "columnCount": 10,
+    "columns": [
+      "task_id",
+      "task_name",
+      "task_type",
+      "task_status",
+      "assigned_machine",
+      "assigned_user",
+      "start_time",
+      "estimated_end_time",
+      "completion_percentage",
+      "priority_level"
+    ]
+  },
+  "data": [
+    {
+      "task_id": 2,
+      "task_name": "Machine Calibration",
+      "task_type": "MAINTENANCE",
+      "task_status": "PENDING",
+      "assigned_machine": "MACHINE-05",
+      "assigned_user": "tech.support",
+      "start_time": "2025-01-09 14:00:00",
+      "estimated_end_time": "2025-01-09 16:00:00",
+      "completion_percentage": 0,
+      "priority_level": 3
+    },
+    {
+      "task_id": 3,
+      "task_name": "Production Line Cleanup",
+      "task_type": "CLEANING",
+      "task_status": "ERROR",
+      "assigned_machine": "LINE-A",
+      "assigned_user": "maintenance.crew",
+      "start_time": "2025-01-09 06:00:00",
+      "estimated_end_time": "2025-01-09 08:00:00",
+      "completion_percentage": 75,
+      "priority_level": 2
+    },
+    {
+      "task_id": 1,
+      "task_name": "Quality Inspection Batch-001",
+      "task_type": "INSPECTION",
+      "task_status": "RUNNING",
+      "assigned_machine": "QC-STATION-01",
+      "assigned_user": "john.doe",
+      "start_time": "2025-01-09 08:00:00",
+      "estimated_end_time": "2025-01-09 12:00:00",
+      "completion_percentage": 45.5,
+      "priority_level": 1
+    }
+  ]
+}

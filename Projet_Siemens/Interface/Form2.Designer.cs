@@ -79,10 +79,10 @@ this.import.BackColor = Color.FromArgb(0, 101, 110);
 this.import.FlatStyle = FlatStyle.Flat;
 this.import.FlatAppearance.BorderSize = 0;
 this.import.ForeColor = Color.White;
-this.import.Font = new Font("Segoe UI", 9F, FontStyle.Regular); // Pas de gras
-this.import.Location = new Point(145, 385); 
+this.import.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+this.import.Location = new Point(170, 385); 
 this.import.Name = "import";
-this.import.Size = new Size(110, 35);
+this.import.Size = new Size(90, 35);
 this.import.TabIndex = 2;
 this.import.Text = "IMPORT";
 this.import.UseVisualStyleBackColor = false;
@@ -94,10 +94,10 @@ this.buttonConfirmJson.BackColor = Color.FromArgb(0, 101, 110);
 this.buttonConfirmJson.FlatStyle = FlatStyle.Flat;
 this.buttonConfirmJson.FlatAppearance.BorderSize = 0;
 this.buttonConfirmJson.ForeColor = Color.White;
-this.buttonConfirmJson.Font = new Font("Segoe UI", 9F, FontStyle.Regular); // Pas de gras
+this.buttonConfirmJson.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
 this.buttonConfirmJson.Location = new Point(270, 385);
 this.buttonConfirmJson.Name = "buttonConfirmJson";
-this.buttonConfirmJson.Size = new Size(110, 35);
+this.buttonConfirmJson.Size = new Size(90, 35);
 this.buttonConfirmJson.TabIndex = 1;
 this.buttonConfirmJson.Text = "CONFIRM";
 this.buttonConfirmJson.UseVisualStyleBackColor = false;
@@ -109,15 +109,32 @@ this.extractFileButton.BackColor = Color.FromArgb(0, 101, 110);
 this.extractFileButton.FlatStyle = FlatStyle.Flat;
 this.extractFileButton.FlatAppearance.BorderSize = 0;
 this.extractFileButton.ForeColor = Color.White;
-this.extractFileButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular); // Pas de gras
-this.extractFileButton.Location = new Point(395, 385);
+this.extractFileButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+this.extractFileButton.Location = new Point(370, 385);
 this.extractFileButton.Name = "extractFileButton";
-this.extractFileButton.Size = new Size(110, 35);
+this.extractFileButton.Size = new Size(90, 35);
 this.extractFileButton.TabIndex = 3;
-this.extractFileButton.Text = "EXTRACT FILE";
+this.extractFileButton.Text = "EXTRACT";
 this.extractFileButton.UseVisualStyleBackColor = false;
 this.extractFileButton.Anchor = AnchorStyles.Bottom;
 this.extractFileButton.Click += new System.EventHandler(this.extractFileButton_Click);
+
+// 5. Bouton TEST MOCK (Nouveau bouton pour les tests)
+this.testMockButton = new Button();
+this.form2MainPanel.Controls.Add(this.testMockButton);
+this.testMockButton.BackColor = Color.FromArgb(200, 100, 50);
+this.testMockButton.FlatStyle = FlatStyle.Flat;
+this.testMockButton.FlatAppearance.BorderSize = 0;
+this.testMockButton.ForeColor = Color.White;
+this.testMockButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+this.testMockButton.Location = new Point(470, 385);
+this.testMockButton.Name = "testMockButton";
+this.testMockButton.Size = new Size(90, 35);
+this.testMockButton.TabIndex = 4;
+this.testMockButton.Text = "🧪 TEST";
+this.testMockButton.UseVisualStyleBackColor = false;
+this.testMockButton.Anchor = AnchorStyles.Bottom;
+this.testMockButton.Click += new System.EventHandler(this.testMockButton_Click);
 
             // 2. DRAG & DROP + MANAGEMENT PANEL (Panel à gauche agrandi)
             dragDropPanel.BackColor = Color.FromArgb(50, 50, 55);
@@ -213,6 +230,7 @@ this.extractFileButton.Click += new System.EventHandler(this.extractFileButton_C
         private Button buttonConfirmJson;
         private Button import;
         private Button extractFileButton;
+        private Button testMockButton;
         private Panel dragDropPanel;
         private Button dragDbButton;
         private Button dragAppServerButton;

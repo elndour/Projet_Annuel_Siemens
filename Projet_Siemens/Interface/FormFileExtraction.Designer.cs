@@ -30,6 +30,7 @@
         {
             extractedFilesPanel = new FlowLayoutPanel();
             panel1 = new Panel();
+            packageButton = new Button();
             sshServ = new CheckBox();
             kindOdextractionButton = new Button();
             label1 = new Label();
@@ -47,6 +48,7 @@
             // panel1 (Colonne Gauche : Sélection)
             // 
             panel1.BackColor = Color.FromArgb(240, 242, 245);
+            panel1.Controls.Add(packageButton);
             panel1.Controls.Add(sshServ);
             panel1.Controls.Add(kindOdextractionButton);
             panel1.Controls.Add(label1);
@@ -100,6 +102,20 @@
             kindOdextractionButton.Text = "Validate Selection";
             kindOdextractionButton.UseVisualStyleBackColor = false;
             kindOdextractionButton.Click += kindOdextractionButton_Click;
+            // 
+            // packageButton
+            // 
+            packageButton.BackColor = Color.FromArgb(230, 126, 34);
+            packageButton.FlatStyle = FlatStyle.Flat;
+            packageButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            packageButton.ForeColor = Color.White;
+            packageButton.Location = new Point(15, 270);
+            packageButton.Name = "packageButton";
+            packageButton.Size = new Size(190, 35);
+            packageButton.TabIndex = 13;
+            packageButton.Text = "📦 Package & Encrypt";
+            packageButton.UseVisualStyleBackColor = false;
+            packageButton.Click += packageButton_Click;
             // 
             // panel2 (Colonne Milieu : Paramètres)
             // 
@@ -200,6 +216,7 @@
         private Label label1;
         private ComboBox machinesList;
         private Button kindOdextractionButton;
+        private Button packageButton;
         private Panel panel2;
         private CheckBox sshServ;
         private Label label2;

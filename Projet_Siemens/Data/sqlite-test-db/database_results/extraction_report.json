@@ -1,0 +1,74 @@
+{
+  "DatabaseId": "sqlite-test-db",
+  "StartTime": "2026-02-27T22:10:35.5831856+01:00",
+  "EndTime": "2026-02-27T22:10:35.5984289+01:00",
+  "TotalQueries": 7,
+  "SuccessfulQueries": 7,
+  "FailedQueries": 0,
+  "Queries": [
+    {
+      "QueryName": "Production Orders",
+      "OutputFile": "production_orders.json",
+      "StartTime": "2026-02-27T22:10:35.5832928+01:00",
+      "EndTime": "2026-02-27T22:10:35.5890984+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0058056"
+    },
+    {
+      "QueryName": "Error Logs",
+      "OutputFile": "error_logs.json",
+      "StartTime": "2026-02-27T22:10:35.5891077+01:00",
+      "EndTime": "2026-02-27T22:10:35.5913006+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0021929"
+    },
+    {
+      "QueryName": "MES Tasks",
+      "OutputFile": "mes_tasks.json",
+      "StartTime": "2026-02-27T22:10:35.5913057+01:00",
+      "EndTime": "2026-02-27T22:10:35.5931917+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0018860"
+    },
+    {
+      "QueryName": "Downtime Events",
+      "OutputFile": "downtime_events.json",
+      "StartTime": "2026-02-27T22:10:35.5932037+01:00",
+      "EndTime": "2026-02-27T22:10:35.5942392+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0010355"
+    },
+    {
+      "QueryName": "Machine Statistics",
+      "OutputFile": "machine_statistics.json",
+      "StartTime": "2026-02-27T22:10:35.5942474+01:00",
+      "EndTime": "2026-02-27T22:10:35.595419+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0011716"
+    },
+    {
+      "QueryName": "Inventory Levels",
+      "OutputFile": "inventory_levels.json",
+      "StartTime": "2026-02-27T22:10:35.5954308+01:00",
+      "EndTime": "2026-02-27T22:10:35.5972983+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0018675"
+    },
+    {
+      "QueryName": "Batch Production",
+      "OutputFile": "batch_production.json",
+      "StartTime": "2026-02-27T22:10:35.59731+01:00",
+      "EndTime": "2026-02-27T22:10:35.5984185+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:00.0011085"
+    }
+  ],
+  "TotalDuration": "00:00:00.0152433"
+}

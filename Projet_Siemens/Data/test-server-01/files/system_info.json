@@ -1,0 +1,9 @@
+{
+  "Hostname": "mock-test-server-01",
+  "OS": "Ubuntu 20.04 LTS",
+  "Kernel": "5.4.0-42-generic",
+  "Uptime": "5 days, 3 hours",
+  "CPU": "Intel Xeon E5-2670",
+  "RAM": "16GB",
+  "Disk": "250GB"
+}

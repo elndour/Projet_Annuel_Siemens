@@ -1,0 +1,38 @@
+{
+  "DatabaseId": "test-mock-db",
+  "StartTime": "2026-02-27T21:58:09.1369927+01:00",
+  "EndTime": "2026-02-27T22:03:09.1370164+01:00",
+  "TotalQueries": 10,
+  "SuccessfulQueries": 9,
+  "FailedQueries": 1,
+  "Queries": [
+    {
+      "QueryName": "Production Orders",
+      "OutputFile": "production_orders.json",
+      "StartTime": "2026-02-27T21:58:09.1370892+01:00",
+      "EndTime": "2026-02-27T21:58:24.137098+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:15.0000088"
+    },
+    {
+      "QueryName": "Error Logs",
+      "OutputFile": "error_logs.json",
+      "StartTime": "2026-02-27T21:58:24.1371237+01:00",
+      "EndTime": "2026-02-27T21:58:39.137124+01:00",
+      "Success": true,
+      "ErrorMessage": null,
+      "Duration": "00:00:15.0000003"
+    },
+    {
+      "QueryName": "Invalid Table Test",
+      "OutputFile": "invalid_table.json",
+      "StartTime": "2026-02-27T21:58:39.1371245+01:00",
+      "EndTime": "2026-02-27T21:58:44.1371247+01:00",
+      "Success": false,
+      "ErrorMessage": "Table 'invalid_table' does not exist",
+      "Duration": "00:00:05.0000002"
+    }
+  ],
+  "TotalDuration": "00:05:00.0000237"
+}

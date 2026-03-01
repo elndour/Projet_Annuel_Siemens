@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "queryName": "Production Orders Test",
+    "extractionDate": "2026-02-27 22:03:09",
+    "database": "TEST_DB",
+    "server": "localhost",
+    "rowCount": 2,
+    "columnCount": 9,
+    "columns": [
+      "order_id",
+      "product_id",
+      "product_name",
+      "quantity_planned",
+      "quantity_produced",
+      "start_time",
+      "end_time",
+      "status",
+      "efficiency_rate"
+    ]
+  },
+  "data": [
+    {
+      "order_id": 1,
+      "product_id": "PROD-001",
+      "product_name": "Widget A",
+      "quantity_planned": 1000,
+      "quantity_produced": 987,
+      "start_time": "2025-01-08 08:00:00",
+      "end_time": "2025-01-08 16:30:00",
+      "status": "COMPLETED",
+      "efficiency_rate": 98.7
+    },
+    {
+      "order_id": 2,
+      "product_id": "PROD-002",
+      "product_name": "Widget B",
+      "quantity_planned": 500,
+      "quantity_produced": 495,
+      "start_time": "2025-01-07 09:00:00",
+      "end_time": "2025-01-07 15:00:00",
+      "status": "COMPLETED",
+      "efficiency_rate": 99
+    }
+  ]
+}
