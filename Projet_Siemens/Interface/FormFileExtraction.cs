@@ -18,88 +18,12 @@ namespace Projet_Siemens.Interface
     public partial class FormFileExtraction : Form
     {
         private Form2 parentForm;
-        private List<string> detectedDataDirectories;
 
         public FormFileExtraction(Form2 parentForm)
         {
             InitializeComponent();
             this.parentForm = parentForm;
-
-            // Détecter automatiquement les répertoires de données
-            detectedDataDirectories = new List<string>();
-            DetectDataDirectories();
-
-            // Remplir la liste avec les machines du réseau + les répertoires détectés
-            PopulateMachinesList();
-        }
-
-        /// <summary>
-        /// Détecte automatiquement les répertoires de données dans Data/
-        /// </summary>
-        private void DetectDataDirectories()
-        {
-            try
-            {
-                string baseDirectory = Path.Combine(
-                    Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName,
-                    "Data"
-                );
-
-                if (Directory.Exists(baseDirectory))
-                {
-                    var directories = Directory.GetDirectories(baseDirectory);
-
-                    foreach (var dir in directories)
-                    {
-                        string dirName = Path.GetFileName(dir);
-
-                        // Ignorer les répertoires système
-                        if (dirName != "SecurePackages" && !dirName.StartsWith("."))
-                        {
-                            // Vérifier si un répertoire contient des données
-                            bool hasData = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories).Length > 0;
-
-                            if (hasData)
-                            {
-                                // Vérifier si cette machine existe déjà dans le réseau
-                                bool existsInNetwork = parentForm.network.machines.Any(m => m.id == dirName);
-
-                                if (!existsInNetwork)
-                                {
-                                    detectedDataDirectories.Add(dirName);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Ignorer les erreurs de détection
-                Console.WriteLine($"Erreur détection : {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Remplit la liste des machines avec les machines du réseau + les répertoires détectés
-        /// </summary>
-        private void PopulateMachinesList()
-        {
-            var items = new List<object>();
-
-            // Ajouter les machines du réseau
-            foreach (var machine in parentForm.network.machines)
-            {
-                items.Add(machine);
-            }
-
-            // Ajouter les répertoires détectés comme "machines virtuelles"
-            foreach (var dataDir in detectedDataDirectories)
-            {
-                items.Add(new VirtualMachine { id = dataDir, displayName = $"📁 {dataDir} (Données détectées)", type = "VirtualData" });
-            }
-
-            machinesList.DataSource = items;
+            machinesList.DataSource = new BindingList<Machine>(parentForm.network.machines);
             machinesList.DisplayMember = "displayName";
         }
 
