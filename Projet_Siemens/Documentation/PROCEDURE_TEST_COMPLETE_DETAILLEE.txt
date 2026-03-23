@@ -1,0 +1,1195 @@
+═══════════════════════════════════════════════════════════════════════════════
+  PROCÉDURE COMPLÈTE DE TEST - GUIDE DÉTAILLÉ
+  Environnement de Test Local avec 2 PCs
+  Projet Siemens - Data Collection & Analysis
+═══════════════════════════════════════════════════════════════════════════════
+
+📌 OBJECTIF DE CE GUIDE
+-----------------------
+Ce guide vous accompagne pas à pas pour transformer vos 2 ordinateurs personnels
+en environnement de test complet pour le système de collecte de données Siemens.
+
+À la fin de ce guide, vous serez capable de :
+✅ Collecter des fichiers via SSH/SFTP depuis localhost et un PC distant
+✅ Extraire des données depuis une base SQLite de test
+✅ Tester le packaging et le cryptage des données
+✅ Débugger et développer sans serveurs de production
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PHASE 1 : PRÉPARATION DE L'ENVIRONNEMENT (30 minutes)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 1.1 : INSTALLATION DE SSH SUR LE PC 1 (Votre ordinateur principal)   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Ouvrir PowerShell en tant qu'Administrateur
+   ────────────────────────────────────────────
+   🔹 Windows 10/11 : 
+      - Clic droit sur le menu Démarrer
+      - Sélectionner "Terminal (Admin)" ou "Windows PowerShell (Admin)"
+      
+   🔹 Vous devriez voir une fenêtre avec :
+      PS C:\Windows\system32>
+
+2️⃣ Vérifier si SSH est déjà installé
+   ──────────────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*' │
+   └────────────────────────────────────────────────────────────────┘
+
+   Résultat attendu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Name  : OpenSSH.Client~~~~0.0.1.0                              │
+   │ State : Installed                                              │
+   │                                                                │
+   │ Name  : OpenSSH.Server~~~~0.0.1.0                              │
+   │ State : NotPresent  ← Si vous voyez "NotPresent", continuez   │
+   └────────────────────────────────────────────────────────────────┘
+
+3️⃣ Installer OpenSSH Server
+   ─────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0  │
+   └────────────────────────────────────────────────────────────────┘
+
+   ⏱️ Temps d'installation : 1-2 minutes
+   
+   Résultat attendu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Path          :                                                │
+   │ Online        : True                                           │
+   │ RestartNeeded : False                                          │
+   └────────────────────────────────────────────────────────────────┘
+
+4️⃣ Démarrer le service SSH
+   ────────────────────────
+   Commande 1 : Démarrer SSH
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Start-Service sshd                                             │
+   └────────────────────────────────────────────────────────────────┘
+
+   Commande 2 : Configurer le démarrage automatique
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Set-Service -Name sshd -StartupType 'Automatic'                │
+   └────────────────────────────────────────────────────────────────┘
+
+   Commande 3 : Vérifier que SSH tourne
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Get-Service sshd                                               │
+   └────────────────────────────────────────────────────────────────┘
+
+   Résultat attendu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Status   Name               DisplayName                        │
+   │ ------   ----               -----------                        │
+   │ Running  sshd               OpenSSH SSH Server                 │
+   └────────────────────────────────────────────────────────────────┘
+
+5️⃣ Configurer le pare-feu Windows
+   ────────────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server'  │
+   │   -Enabled True -Direction Inbound -Protocol TCP              │
+   │   -Action Allow -LocalPort 22                                 │
+   └────────────────────────────────────────────────────────────────┘
+
+   Résultat attendu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Name                  : sshd                                   │
+   │ DisplayName           : OpenSSH Server                         │
+   │ Description           :                                        │
+   │ DisplayGroup          :                                        │
+   │ Group                 :                                        │
+   │ Enabled               : True                                   │
+   │ Profile               : Any                                    │
+   │ Platform              : {}                                     │
+   │ Direction             : Inbound                                │
+   │ Action                : Allow                                  │
+   │ EdgeTraversalPolicy   : Block                                  │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 1.2 : CRÉER UN UTILISATEUR DE TEST SUR LE PC 1                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Créer l'utilisateur "testuser"
+   ──────────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser test123 /add                                │
+   └────────────────────────────────────────────────────────────────┘
+
+   Résultat attendu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ La commande s'est terminée correctement.                       │
+   └────────────────────────────────────────────────────────────────┘
+
+   ⚠️ SI VOUS VOYEZ UNE ERREUR DE POLITIQUE DE MOT DE PASSE :
+   
+   Erreur possible :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Le mot de passe ne répond pas aux exigences de stratégie      │
+   └────────────────────────────────────────────────────────────────┘
+
+   Solution : Utilisez un mot de passe plus complexe
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser Test@2025! /add                             │
+   └────────────────────────────────────────────────────────────────┘
+
+2️⃣ (OPTIONNEL) Ajouter aux administrateurs
+   ────────────────────────────────────────
+   ⚠️ ATTENTION : Ceci donne des privilèges élevés
+   
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net localgroup Administrators testuser /add                   │
+   └────────────────────────────────────────────────────────────────┘
+
+3️⃣ Vérifier que l'utilisateur existe
+   ──────────────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser                                             │
+   └────────────────────────────────────────────────────────────────┘
+
+   Résultat attendu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Nom d'utilisateur           testuser                           │
+   │ Nom complet                                                    │
+   │ Commentaire                                                    │
+   │ ...                                                            │
+   │ Le compte est actif          Oui                               │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 1.3 : TESTER LA CONNEXION SSH LOCALE                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Tester la connexion SSH vers localhost
+   ───────────────────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ssh testuser@localhost                                         │
+   └────────────────────────────────────────────────────────────────┘
+
+   🔹 Première connexion - Vous verrez un message de sécurité :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ The authenticity of host 'localhost (::1)' can't be established│
+   │ ECDSA key fingerprint is SHA256:xxxxxxxxxxxxxxxxxxxx.         │
+   │ Are you sure you want to continue connecting (yes/no/[fingerprint])? │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Tapez : yes
+   👉 Appuyez sur Entrée
+
+   🔹 Entrer le mot de passe :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ testuser@localhost's password:                                │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Tapez : test123 (ou le mot de passe que vous avez choisi)
+   👉 Appuyez sur Entrée
+   
+   ⚠️ Le mot de passe ne s'affiche pas quand vous tapez (c'est normal)
+
+2️⃣ Résultat attendu si connexion réussie
+   ──────────────────────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Microsoft Windows [Version 10.0.19045.xxxx]                   │
+   │ (c) Microsoft Corporation. All rights reserved.               │
+   │                                                                │
+   │ testuser@VOTRE-PC C:\Users\testuser>                          │
+   └────────────────────────────────────────────────────────────────┘
+
+   ✅ SUCCÈS ! Vous êtes connecté en SSH !
+
+3️⃣ Quitter la session SSH
+   ───────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ exit                                                           │
+   └────────────────────────────────────────────────────────────────┘
+
+   Vous retournez à votre session PowerShell normale
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 1.4 : (OPTIONNEL) CONFIGURATION DU PC 2                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+⚠️ PRÉREQUIS : Les 2 PCs doivent être sur le MÊME RÉSEAU LOCAL
+   (même WiFi ou connectés au même routeur/switch)
+
+1️⃣ Sur le PC 2 : Répéter les étapes 1.1 et 1.2
+   ───────────────────────────────────────────
+   - Installer SSH (Étape 1.1)
+   - Créer l'utilisateur testuser (Étape 1.2)
+
+2️⃣ Sur le PC 2 : Trouver son adresse IP
+   ────────────────────────────────────
+   Commande :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ipconfig                                                       │
+   └────────────────────────────────────────────────────────────────┘
+
+   Cherchez dans le résultat :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Carte Ethernet Ethernet:                                       │
+   │    ...                                                         │
+   │    Adresse IPv4. . . . . . . . . . . . . .: 192.168.1.105     │
+   │                                              └──────────┘      │
+   │                                              NOTEZ CETTE IP !  │
+   └────────────────────────────────────────────────────────────────┘
+
+   Ou si vous êtes en WiFi :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Carte réseau sans fil Wi-Fi:                                   │
+   │    ...                                                         │
+   │    Adresse IPv4. . . . . . . . . . . . . .: 192.168.1.105     │
+   └────────────────────────────────────────────────────────────────┘
+
+3️⃣ Sur le PC 1 : Tester la connexion vers le PC 2
+   ──────────────────────────────────────────────
+   
+   🔹 Test de ping :
+   Commande (remplacez 192.168.1.105 par l'IP du PC 2) :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ping 192.168.1.105                                            │
+   └────────────────────────────────────────────────────────────────┘
+
+   Résultat attendu si ça marche :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Réponse de 192.168.1.105 : octets=32 temps=1ms TTL=128       │
+   │ Réponse de 192.168.1.105 : octets=32 temps<1ms TTL=128       │
+   │ Réponse de 192.168.1.105 : octets=32 temps<1ms TTL=128       │
+   │                                                                │
+   │ Paquets : envoyés = 4, reçus = 4, perdus = 0                 │
+   └────────────────────────────────────────────────────────────────┘
+
+   ❌ Si le ping échoue, voir "RÉSOLUTION DES PROBLÈMES" plus bas
+
+   🔹 Test SSH :
+   Commande (remplacez par l'IP du PC 2) :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ssh testuser@192.168.1.105                                    │
+   └────────────────────────────────────────────────────────────────┘
+
+   ✅ Si ça marche, vous êtes connecté au PC 2 !
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PHASE 2 : CONFIGURATION DANS L'APPLICATION (10 minutes)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 2.1 : LANCER L'APPLICATION ET ACCÉDER AU MODE TEST                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Ouvrir le projet dans Visual Studio
+   ────────────────────────────────────
+   - Fichier : Projet_Siemens.sln
+   - Appuyez sur F5 pour lancer l'application
+
+2️⃣ Naviguer vers FormFileExtraction
+   ─────────────────────────────────
+   Dans l'application :
+   - Cliquez sur le menu ou l'onglet "File Extraction"
+   - Vous devriez voir une interface avec :
+     • Une liste de machines à gauche
+     • Des boutons "Extract Data", "Package & Encrypt"
+     • Un bouton "🧪 Mode Test Local (2 PCs)" en bas
+
+3️⃣ Cliquer sur "🧪 Mode Test Local (2 PCs)"
+   ────────────────────────────────────────
+   Une nouvelle fenêtre s'ouvre : "Configuration Environnement de Test Local"
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 2.2 : GÉNÉRER LES DONNÉES DE TEST POUR LE PC 1                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Dans la fenêtre "Configuration Environnement de Test Local" :
+
+1️⃣ Section "💻 PC 1 - Cet ordinateur (localhost)"
+   ──────────────────────────────────────────────
+
+   🔹 Vous devriez voir :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ IP: 192.168.x.x (localhost: 127.0.0.1)                        │
+   │ ✓ Disponible                                                  │
+   │                                                                │
+   │ [📁 Générer fichiers de test (20 fichiers)]                   │
+   │ [🗄️ Créer base de données SQLite de test]                    │
+   └────────────────────────────────────────────────────────────────┘
+
+2️⃣ Cliquer sur "📁 Générer fichiers de test (20 fichiers)"
+   ─────────────────────────────────────────────────────────
+
+   ⏱️ Temps d'exécution : 2-3 secondes
+
+   ✅ Résultat :
+   - Une MessageBox s'affiche : "20 fichiers de test ont été générés avec succès !"
+   - Dans la zone de texte en bas, vous verrez :
+
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ✅ FICHIERS DE TEST GÉNÉRÉS POUR PC 1                         │
+   │                                                                │
+   │ 📁 Emplacement : C:\...\Projet_Annuel_Siemens\TestData\       │
+   │                  PC1_TestServer\test_files\                   │
+   │                                                                │
+   │ Fichiers créés :                                               │
+   │ • Fichiers .log - Journaux système simulés                    │
+   │ • Fichiers .xml - Configurations XML                          │
+   │ • Fichiers .config - Fichiers de paramètres                   │
+   │ • Fichiers .nfo - Informations système                        │
+   └────────────────────────────────────────────────────────────────┘
+
+3️⃣ Vérifier que les fichiers existent
+   ───────────────────────────────────
+
+   🔹 Ouvrir l'Explorateur Windows
+   🔹 Naviguer vers : C:\Users\LENOVO\Desktop\Projet_Annuel_Siemens\TestData\PC1_TestServer\test_files\
+   
+   🔹 Vous devriez voir :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ test_file_001.log      1 Ko                                   │
+   │ test_file_002.xml      1 Ko                                   │
+   │ test_file_003.config   1 Ko                                   │
+   │ test_file_004.nfo      2 Ko                                   │
+   │ test_file_005.log      1 Ko                                   │
+   │ ...                                                            │
+   │ test_file_020.nfo      2 Ko                                   │
+   └────────────────────────────────────────────────────────────────┘
+
+4️⃣ Cliquer sur "🗄️ Créer base de données SQLite de test"
+   ────────────────────────────────────────────────────────
+
+   ⏱️ Temps d'exécution : 5-10 secondes
+
+   ✅ Résultat :
+   - Une MessageBox s'affiche : "Base de données SQLite créée avec succès !"
+   - Dans la zone de texte :
+
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ✅ BASE DE DONNÉES SQLITE CRÉÉE                               │
+   │                                                                │
+   │ 📁 Emplacement : C:\...\TestData\PC1_TestDatabase\database\   │
+   │                  test_mes_database.db                         │
+   │                                                                │
+   │ La base de données de test contient :                         │
+   │ • Tables de production (ProductionOrders, Tasks)              │
+   │ • Logs système (SystemLogs)                                   │
+   │ • Données machines (MachineStats)                             │
+   │ • Événements (StopEvents)                                     │
+   │ • Métriques de qualité (QualityMetrics)                       │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 2.3 : (OPTIONNEL) CONFIGURER LE PC 2                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Dans la section "💻 PC 2 - Deuxième ordinateur" :
+
+1️⃣ Entrer l'adresse IP du PC 2
+   ───────────────────────────
+   🔹 Dans le champ "IP:" entrez : 192.168.1.105 (votre IP du PC 2)
+
+2️⃣ Cliquer sur "🔌 Tester la connexion"
+   ────────────────────────────────────
+
+   ⏱️ Temps d'exécution : 2-3 secondes
+
+   ✅ Si succès :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ✓ Connecté (ping: 2ms)                                        │
+   │                                                                │
+   │ ✓ PC 2 est accessible !                                       │
+   │                                                                │
+   │ Ping: 2 ms                                                    │
+   │                                                                │
+   │ Vous pouvez maintenant créer les machines de test.            │
+   └────────────────────────────────────────────────────────────────┘
+
+   ❌ Si échec :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ✗ Échec : TimedOut                                            │
+   │                                                                │
+   │ ❌ PC 2 NON ACCESSIBLE                                        │
+   │                                                                │
+   │ Voir la section "RÉSOLUTION DES PROBLÈMES"                    │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 2.4 : CRÉER LES MACHINES DE TEST                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Cliquer sur le bouton vert en bas :
+   ────────────────────────────────────
+   [✅ Créer les machines de test dans le réseau]
+
+2️⃣ Confirmer la création
+   ─────────────────────
+   Une boîte de dialogue apparaît :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Créer les machines de test et les ajouter au réseau ?         │
+   │                                                                │
+   │ Cela va créer :                                                │
+   │ • PC1_TestServer (localhost)                                   │
+   │ • PC1_TestDatabase (SQLite local)                              │
+   │ • PC2_TestServer (deuxième PC)                                 │
+   │                                                                │
+   │ Les machines apparaîtront dans la liste de FormFileExtraction.│
+   │                                                                │
+   │          [Oui]              [Non]                              │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Cliquez sur "Oui"
+
+3️⃣ Résultat
+   ────────
+   ✅ MessageBox :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ✅ 3 machines de test créées !                                │
+   │                                                                │
+   │ Les machines sont maintenant disponibles dans                  │
+   │ FormFileExtraction.                                            │
+   │                                                                │
+   │ Vous pouvez fermer cette fenêtre et commencer vos tests.      │
+   └────────────────────────────────────────────────────────────────┘
+
+4️⃣ Fermer la fenêtre de configuration
+   ───────────────────────────────────
+   👉 Cliquez sur "Fermer" ou le X
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PHASE 3 : TESTS DE COLLECTE DE DONNÉES (20 minutes)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TEST 1 : COLLECTE DE FICHIERS SSH/SFTP DEPUIS LOCALHOST                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Vous êtes de retour dans FormFileExtraction
+
+1️⃣ Vérifier que les machines de test apparaissent
+   ──────────────────────────────────────────────
+
+   🔹 Dans la liste déroulante "Available Machines", vous devriez voir :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ TestServer : PC1_TestServer                                   │
+   │ DataBase : PC1_TestDatabase                                   │
+   │ TestServer : PC2_TestServer                                   │
+   └────────────────────────────────────────────────────────────────┘
+
+2️⃣ Sélectionner "TestServer : PC1_TestServer"
+   ──────────────────────────────────────────
+
+3️⃣ Cliquer sur "Extract Data" (ou "Validate Selection")
+   ────────────────────────────────────────────────────
+
+4️⃣ Fenêtre "SSH Credentials"
+   ─────────────────────────
+   Une fenêtre s'ouvre pour demander les credentials :
+
+   ┌────────────────────────────────────────────────────────────────┐
+   │ SSH Connection to: 127.0.0.1                                  │
+   │                                                                │
+   │ Username: [testuser          ]                                │
+   │                                                                │
+   │ Password: [●●●●●●●●          ]                                │
+   │                                                                │
+   │ Port:     [22                ]                                │
+   │                                                                │
+   │          [OK]      [Cancel]                                    │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Entrez :
+      - Username: testuser
+      - Password: test123 (ou votre mot de passe)
+      - Port: 22
+   👉 Cliquez sur "OK"
+
+5️⃣ Test de connexion SSH
+   ──────────────────────
+   Le bouton change :
+   [Extract Data] → [Test connexion...] → [Collecte en cours...]
+
+   ⏱️ Durée : 3-5 secondes
+
+6️⃣ Boîte de confirmation
+   ─────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Voulez-vous lancer la collecte de fichiers depuis              │
+   │ 'PC1_TestServer' ?                                             │
+   │                                                                │
+   │ Fichiers à récupérer :                                         │
+   │ • Fichiers .log (journaux système)                            │
+   │ • Fichiers .xml (configurations)                              │
+   │ • Fichiers .config (paramètres)                               │
+   │ • Fichiers .nfo (informations)                                │
+   │                                                                │
+   │ Les fichiers seront sauvegardés dans                           │
+   │ Data/PC1_TestServer/files/                                    │
+   │                                                                │
+   │          [Oui]              [Non]                              │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Cliquez sur "Oui"
+
+7️⃣ Collecte en cours
+   ─────────────────
+   Le bouton affiche : [Collecte en cours...]
+   ⏱️ Durée : 5-10 secondes (selon le nombre de fichiers)
+
+8️⃣ Rapport de collecte
+   ───────────────────
+   ✅ Une MessageBox affiche le rapport :
+
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ========== RAPPORT DE COLLECTE SSH/SFTP ==========            │
+   │ Machine : PC1_TestServer (TestServer)                         │
+   │ IP : 127.0.0.1                                                │
+   │ Date : 2025-01-09 14:30:25                                    │
+   │ Durée : 3.45 secondes                                         │
+   │                                                                │
+   │ Statut : ✓ RÉUSSI                                             │
+   │                                                                │
+   │ ========== FICHIERS COLLECTÉS ==========                      │
+   │ • .log        :     5 fichiers                                │
+   │ • .xml        :     5 fichiers                                │
+   │ • .config     :     5 fichiers                                │
+   │ • .nfo        :     5 fichiers                                │
+   │                                                                │
+   │ TOTAL : 20 fichiers                                           │
+   │                                                                │
+   │                         [OK]                                   │
+   └────────────────────────────────────────────────────────────────┘
+
+9️⃣ Vérifier les résultats
+   ──────────────────────
+   🔹 Une fenêtre de l'Explorateur s'ouvre automatiquement
+   🔹 Emplacement : C:\...\Projet_Annuel_Siemens\Data\PC1_TestServer\files\
+
+   🔹 Vous devriez voir :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ 📁 log\                                                       │
+   │    ├─ test_file_001.log                                       │
+   │    ├─ test_file_005.log                                       │
+   │    └─ ...                                                     │
+   │                                                                │
+   │ 📁 xml\                                                       │
+   │    ├─ test_file_002.xml                                       │
+   │    └─ ...                                                     │
+   │                                                                │
+   │ 📁 config\                                                    │
+   │    ├─ test_file_003.config                                    │
+   │    └─ ...                                                     │
+   │                                                                │
+   │ 📁 nfo\                                                       │
+   │    ├─ test_file_004.nfo                                       │
+   │    └─ ...                                                     │
+   │                                                                │
+   │ 📄 collection_report.json                                     │
+   └────────────────────────────────────────────────────────────────┘
+
+🔟 Examiner le rapport JSON
+   ────────────────────────
+   🔹 Ouvrez collection_report.json avec Notepad ou VS Code
+
+   Contenu :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ {                                                              │
+   │   "MachineId": "PC1_TestServer",                              │
+   │   "MachineType": "TestServer",                                │
+   │   "MachineIp": "127.0.0.1",                                   │
+   │   "StartTime": "2025-01-09T14:30:25",                         │
+   │   "EndTime": "2025-01-09T14:30:28",                           │
+   │   "Duration": "00:00:03.4500000",                             │
+   │   "Success": true,                                             │
+   │   "ErrorMessage": null,                                        │
+   │   "FilesCollected": {                                          │
+   │     "log": 5,                                                  │
+   │     "xml": 5,                                                  │
+   │     "config": 5,                                               │
+   │     "nfo": 5                                                   │
+   │   },                                                           │
+   │   "TotalFiles": 20                                             │
+   │ }                                                              │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TEST 2 : EXTRACTION DE DONNÉES DEPUIS LA BASE SQLITE                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Retour dans FormFileExtraction
+   ──────────────────────────────
+
+2️⃣ Sélectionner "DataBase : PC1_TestDatabase"
+   ──────────────────────────────────────────
+
+3️⃣ Cliquer sur "Extract Data"
+   ─────────────────────────────
+
+4️⃣ Test de connexion
+   ─────────────────
+   ⏱️ Durée : 1-2 secondes
+
+   ✅ Si la base SQLite existe et est valide, la connexion réussit
+
+5️⃣ Boîte de confirmation
+   ─────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Voulez-vous lancer l'extraction complète des données MES      │
+   │ de la base 'PC1_TestDatabase' ?                               │
+   │                                                                │
+   │ Cela va extraire :                                             │
+   │ • Ordres de production (30 derniers jours)                    │
+   │ • Logs d'erreurs critiques                                    │
+   │ • Tâches MES actives                                          │
+   │ • Statistiques des machines                                   │
+   │ • Événements d'arrêt                                          │
+   │ • Métriques de qualité                                        │
+   │ • Indicateurs de santé système                                │
+   │                                                                │
+   │ Les résultats seront sauvegardés dans                          │
+   │ Data/PC1_TestDatabase/database_results/                       │
+   │                                                                │
+   │          [Oui]              [Non]                              │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Cliquez sur "Oui"
+
+6️⃣ Extraction en cours
+   ───────────────────
+   Le bouton affiche : [Extraction en cours...]
+   ⏱️ Durée : 10-15 secondes (plusieurs requêtes SQL)
+
+7️⃣ Rapport d'extraction
+   ────────────────────
+   ✅ Une MessageBox affiche le rapport détaillé :
+
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ========== RAPPORT D'EXTRACTION ==========                     │
+   │ Base de données : PC1_TestDatabase                            │
+   │ Date d'extraction : 2025-01-09 14:35:10                       │
+   │ Durée totale : 12.34 secondes                                 │
+   │                                                                │
+   │ Total de requêtes : 4                                          │
+   │ ✓ Réussies : 4                                                │
+   │ ✗ Échouées : 0                                                │
+   │                                                                │
+   │ ========== DÉTAILS DES REQUÊTES ==========                    │
+   │ ✓ Production Orders                                           │
+   │    Fichier: production_orders.json                            │
+   │    Durée: 3.21s                                               │
+   │                                                                │
+   │ ✓ Error Logs                                                  │
+   │    Fichier: error_logs.json                                   │
+   │    Durée: 2.45s                                               │
+   │                                                                │
+   │ ✓ Task Status                                                 │
+   │    Fichier: task_status.json                                  │
+   │    Durée: 3.12s                                               │
+   │                                                                │
+   │ ✓ Machine Statistics                                          │
+   │    Fichier: machine_statistics.json                           │
+   │    Durée: 3.56s                                               │
+   │                                                                │
+   │                         [OK]                                   │
+   └────────────────────────────────────────────────────────────────┘
+
+8️⃣ Vérifier les résultats
+   ──────────────────────
+   🔹 Une fenêtre de l'Explorateur s'ouvre automatiquement
+   🔹 Emplacement : C:\...\Data\PC1_TestDatabase\database_results\
+
+   🔹 Vous devriez voir :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ 📄 production_orders.json         25 Ko                       │
+   │ 📄 error_logs.json                18 Ko                       │
+   │ 📄 task_status.json               12 Ko                       │
+   │ 📄 machine_statistics.json        8 Ko                        │
+   │ 📄 extraction_report.json         5 Ko                        │
+   └────────────────────────────────────────────────────────────────┘
+
+9️⃣ Examiner les données extraites
+   ──────────────────────────────
+   🔹 Ouvrez production_orders.json avec un éditeur JSON
+
+   Structure :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ {                                                              │
+   │   "metadata": {                                                │
+   │     "queryName": "Production Orders",                         │
+   │     "extractionDate": "2025-01-09 14:35:12",                  │
+   │     "database": "test_mes_database.db",                       │
+   │     "rowCount": 150,                                           │
+   │     "columnCount": 7,                                          │
+   │     "columns": ["order_id", "product_id", ...]                │
+   │   },                                                           │
+   │   "data": [                                                    │
+   │     {                                                          │
+   │       "order_id": "ORD-001",                                   │
+   │       "product_id": "PROD-A123",                              │
+   │       "quantity_planned": 1000,                                │
+   │       "quantity_produced": 980,                                │
+   │       "start_time": "2025-01-01 08:00:00",                    │
+   │       "end_time": "2025-01-01 16:30:00",                      │
+   │       "status": "COMPLETED"                                    │
+   │     },                                                         │
+   │     ...                                                        │
+   │   ]                                                            │
+   │ }                                                              │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TEST 3 : (OPTIONNEL) COLLECTE DEPUIS LE PC 2 DISTANT                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+⚠️ PRÉREQUIS : Le PC 2 doit être configuré avec SSH et accessible
+
+1️⃣ Sélectionner "TestServer : PC2_TestServer"
+   ──────────────────────────────────────────
+
+2️⃣ Cliquer sur "Extract Data"
+   ─────────────────────────────
+
+3️⃣ Entrer les credentials du PC 2
+   ──────────────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ SSH Connection to: 192.168.1.105                              │
+   │                                                                │
+   │ Username: [testuser          ]                                │
+   │ Password: [●●●●●●●●          ]                                │
+   │ Port:     [22                ]                                │
+   │                                                                │
+   │          [OK]      [Cancel]                                    │
+   └────────────────────────────────────────────────────────────────┘
+
+4️⃣ La collecte se fait de la même manière que pour localhost
+   ──────────────────────────────────────────────────────────
+   Mais cette fois, les fichiers sont récupérés depuis le PC distant !
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PHASE 4 : TEST DE PACKAGING ET CRYPTAGE (5 minutes)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TEST 4 : CRÉER UN PACKAGE SÉCURISÉ                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣ Sélectionner une machine avec des données collectées
+   ───────────────────────────────────────────────────
+   Par exemple : "TestServer : PC1_TestServer"
+
+2️⃣ Cliquer sur "📦 Package & Encrypt"
+   ──────────────────────────────────
+
+3️⃣ Confirmation
+   ────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Créer un package sécurisé pour 'PC1_TestServer' ?             │
+   │                                                                │
+   │ Le package inclura :                                           │
+   │ ✓ Compression ZIP                                             │
+   │ ✓ Cryptage AES-256                                            │
+   │ ✓ Génération automatique de mot de passe                      │
+   │                                                                │
+   │ Format : Siemens_Debug_PC1_TestServer_[Date].zip.enc          │
+   │                                                                │
+   │          [Oui]              [Non]                              │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Cliquez sur "Oui"
+
+4️⃣ Choix du mot de passe
+   ─────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Voulez-vous fournir votre propre mot de passe ?               │
+   │                                                                │
+   │ OUI : Vous saisissez un mot de passe                          │
+   │ NON : Génération automatique d'un mot de passe fort           │
+   │                                                                │
+   │          [Oui]      [Non]      [Annuler]                       │
+   └────────────────────────────────────────────────────────────────┘
+
+   👉 Pour le test, cliquez sur "Non" (génération automatique)
+
+5️⃣ Packaging en cours
+   ──────────────────
+   Le bouton affiche : [Packaging...]
+   ⏱️ Durée : 5-10 secondes
+
+6️⃣ Rapport de packaging
+   ────────────────────
+   ✅ Une MessageBox affiche :
+
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ========== PACKAGE CRÉÉ AVEC SUCCÈS ==========                │
+   │                                                                │
+   │ Machine: PC1_TestServer                                       │
+   │ Date: 2025-01-09 14:40:15                                     │
+   │                                                                │
+   │ 📦 FICHIER ZIP                                                │
+   │ Taille: 2.45 MB                                               │
+   │ Fichiers: 24                                                  │
+   │                                                                │
+   │ 🔐 CRYPTAGE AES-256                                           │
+   │ Fichier crypté: 2.46 MB                                       │
+   │                                                                │
+   │ 🔑 MOT DE PASSE                                               │
+   │ XkP9#mN2$vL8@wQ5                                              │
+   │                                                                │
+   │ ⚠️  NOTEZ CE MOT DE PASSE ! Il est nécessaire pour           │
+   │     décrypter le package.                                     │
+   │                                                                │
+   │ Package sauvegardé dans:                                       │
+   │ Data/SecurePackages/                                          │
+   │ Siemens_Debug_PC1_TestServer_20250109_144015.zip.enc          │
+   │                                                                │
+   │                         [OK]                                   │
+   └────────────────────────────────────────────────────────────────┘
+
+   ⚠️ IMPORTANT : NOTEZ LE MOT DE PASSE !
+
+7️⃣ Vérifier le package
+   ───────────────────
+   🔹 Une fenêtre de l'Explorateur s'ouvre
+   🔹 Emplacement : C:\...\Data\SecurePackages\
+
+   🔹 Vous devriez voir :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ 📄 Siemens_Debug_PC1_TestServer_20250109_144015.zip.enc       │
+   │    2,458 Ko                                                   │
+   │                                                                │
+   │ 📄 PC1_TestServer_package_report.json                         │
+   │    3 Ko                                                       │
+   │                                                                │
+   │ 📄 PASSWORD_XkP9#mN2$vL8@wQ5.txt                              │
+   │    1 Ko                                                       │
+   └────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  RÉSOLUTION DES PROBLÈMES
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLÈME 1 : "Impossible de se connecter au serveur !" (SSH)               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✅ SOLUTIONS :
+
+1️⃣ Vérifier que le service SSH est actif
+   ──────────────────────────────────────
+   PowerShell :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Get-Service sshd                                               │
+   └────────────────────────────────────────────────────────────────┘
+
+   Si "Stopped", démarrez-le :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Start-Service sshd                                             │
+   └────────────────────────────────────────────────────────────────┘
+
+2️⃣ Tester SSH en ligne de commande
+   ────────────────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ssh testuser@localhost                                         │
+   └────────────────────────────────────────────────────────────────┘
+
+   Si ça marche en ligne de commande mais pas dans l'app :
+   - Vérifiez le username/password dans l'app
+   - Vérifiez que le port est bien 22
+
+3️⃣ Vérifier le pare-feu
+   ────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Get-NetFirewallRule -Name sshd                                │
+   └────────────────────────────────────────────────────────────────┘
+
+   Si la règle n'existe pas, créez-la (voir Étape 1.1.5)
+
+4️⃣ Redémarrer le service SSH
+   ─────────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Restart-Service sshd                                           │
+   └────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLÈME 2 : Le ping vers le PC 2 échoue                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✅ SOLUTIONS :
+
+1️⃣ Vérifier que les 2 PCs sont sur le même réseau
+   ──────────────────────────────────────────────
+   - Même WiFi ou même switch/routeur
+   - Même plage d'adresses (ex: 192.168.1.x)
+
+2️⃣ Désactiver temporairement le pare-feu du PC 2
+   ─────────────────────────────────────────────
+   ⚠️ Pour tester uniquement ! Réactivez-le après !
+   
+   Windows :
+   - Panneau de configuration
+   - Système et sécurité
+   - Pare-feu Windows Defender
+   - Activer ou désactiver le Pare-feu Windows Defender
+   - Cochez "Désactiver" (temporairement)
+
+   Testez le ping. Si ça marche maintenant, c'est le pare-feu.
+
+3️⃣ Créer une règle de pare-feu pour ICMP (ping)
+   ────────────────────────────────────────────
+   Sur le PC 2, PowerShell Admin :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ New-NetFirewallRule -DisplayName "Allow ICMP"                 │
+   │   -Direction Inbound -Protocol ICMPv4 -IcmpType 8             │
+   │   -Action Allow                                                │
+   └────────────────────────────────────────────────────────────────┘
+
+4️⃣ Vérifier l'adresse IP
+   ─────────────────────
+   Sur le PC 2 :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ipconfig                                                       │
+   └────────────────────────────────────────────────────────────────┘
+
+   Assurez-vous d'utiliser la bonne adresse IPv4
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLÈME 3 : "Aucun fichier collecté" ou 0 fichiers                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✅ SOLUTIONS :
+
+1️⃣ Vérifier que les fichiers de test existent
+   ──────────────────────────────────────────
+   Ouvrir l'Explorateur :
+   C:\Users\LENOVO\Desktop\Projet_Annuel_Siemens\TestData\PC1_TestServer\test_files\
+
+   Si le dossier est vide ou n'existe pas :
+   - Retournez dans FormLocalTestSetup
+   - Cliquez sur "Générer fichiers de test"
+
+2️⃣ Vérifier les chemins de collecte SSH
+   ────────────────────────────────────
+   Le FileCollector cherche les fichiers dans des chemins spécifiques.
+   
+   Par défaut, il cherche dans :
+   - C:\TestData\
+   - C:\Users\[user]\Documents\
+   - Le home directory de l'utilisateur SSH
+
+   Solution : Créer des fichiers dans C:\TestData\Siemens_Files\
+
+3️⃣ Examiner les logs d'erreur
+   ──────────────────────────
+   Si la collecte échoue, notez le message d'erreur exact
+   et consultez la documentation du FileCollector
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLÈME 4 : Erreur de connexion à la base de données                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✅ SOLUTIONS :
+
+1️⃣ Vérifier que la base SQLite a été créée
+   ───────────────────────────────────────
+   Ouvrir l'Explorateur :
+   C:\Users\LENOVO\Desktop\Projet_Annuel_Siemens\TestData\PC1_TestDatabase\database\
+
+   Le fichier test_mes_database.db doit exister
+
+2️⃣ Recréer la base de données
+   ──────────────────────────
+   - Retournez dans FormLocalTestSetup
+   - Cliquez sur "Créer base de données SQLite de test"
+
+3️⃣ Vérifier les credentials de connexion
+   ──────────────────────────────────────
+   Pour SQLite, pas besoin de username/password
+   Vérifiez juste le chemin du fichier .db
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLÈME 5 : "Permission denied" lors de la connexion SSH                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✅ SOLUTIONS :
+
+1️⃣ Vérifier le username et le mot de passe
+   ───────────────────────────────────────
+   PowerShell :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser                                             │
+   └────────────────────────────────────────────────────────────────┘
+
+   Si l'utilisateur n'existe pas, créez-le (voir Étape 1.2)
+
+2️⃣ Réinitialiser le mot de passe
+   ────────────────────────────
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser NewPassword123!                             │
+   └────────────────────────────────────────────────────────────────┘
+
+3️⃣ Vérifier la configuration SSH
+   ────────────────────────────
+   Éditez C:\ProgramData\ssh\sshd_config (Notepad Admin)
+   
+   Assurez-vous que ces lignes sont présentes :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ PasswordAuthentication yes                                     │
+   │ PubkeyAuthentication yes                                       │
+   └────────────────────────────────────────────────────────────────┘
+
+   Après modification, redémarrez SSH :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Restart-Service sshd                                           │
+   └────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  ANNEXE : COMMANDES UTILES
+═══════════════════════════════════════════════════════════════════════════════
+
+📌 GESTION DU SERVICE SSH
+   ─────────────────────
+   Vérifier le statut :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Get-Service sshd                                               │
+   └────────────────────────────────────────────────────────────────┘
+
+   Démarrer :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Start-Service sshd                                             │
+   └────────────────────────────────────────────────────────────────┘
+
+   Arrêter :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Stop-Service sshd                                              │
+   └────────────────────────────────────────────────────────────────┘
+
+   Redémarrer :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Restart-Service sshd                                           │
+   └────────────────────────────────────────────────────────────────┘
+
+   Démarrage automatique :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Set-Service -Name sshd -StartupType 'Automatic'                │
+   └────────────────────────────────────────────────────────────────┘
+
+
+📌 GESTION DES UTILISATEURS
+   ───────────────────────
+   Créer un utilisateur :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser test123 /add                                │
+   └────────────────────────────────────────────────────────────────┘
+
+   Changer le mot de passe :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser NewPassword                                 │
+   └────────────────────────────────────────────────────────────────┘
+
+   Supprimer un utilisateur :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user testuser /delete                                     │
+   └────────────────────────────────────────────────────────────────┘
+
+   Lister tous les utilisateurs :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ net user                                                       │
+   └────────────────────────────────────────────────────────────────┘
+
+
+📌 RÉSEAU ET CONNECTIVITÉ
+   ──────────────────────
+   Voir l'IP locale :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ipconfig                                                       │
+   └────────────────────────────────────────────────────────────────┘
+
+   Tester la connexion :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ ping 192.168.1.105                                            │
+   └────────────────────────────────────────────────────────────────┘
+
+   Voir les connexions SSH actives :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ netstat -an | findstr :22                                     │
+   └────────────────────────────────────────────────────────────────┘
+
+
+📌 PARE-FEU
+   ────────
+   Lister les règles SSH :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Get-NetFirewallRule -Name sshd                                │
+   └────────────────────────────────────────────────────────────────┘
+
+   Supprimer une règle :
+   ┌────────────────────────────────────────────────────────────────┐
+   │ Remove-NetFirewallRule -Name sshd                             │
+   └────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  RÉCAPITULATIF DES TESTS RÉUSSIS
+═══════════════════════════════════════════════════════════════════════════════
+
+À la fin de cette procédure, vous devriez avoir :
+
+✅ SSH installé et fonctionnel sur le PC 1 (et optionnellement le PC 2)
+✅ Utilisateur de test créé (testuser)
+✅ 3 machines de test créées dans l'application
+✅ 20 fichiers de test générés dans TestData/PC1_TestServer/
+✅ Base de données SQLite créée dans TestData/PC1_TestDatabase/
+✅ Collecte SSH/SFTP réussie (20 fichiers récupérés)
+✅ Extraction de données depuis SQLite réussie (4 fichiers JSON)
+✅ Package sécurisé créé avec cryptage AES-256
+
+📊 RÉSULTATS ATTENDUS :
+   ───────────────────
+   Data/
+   ├── PC1_TestServer/
+   │   └── files/
+   │       ├── log/ (5 fichiers)
+   │       ├── xml/ (5 fichiers)
+   │       ├── config/ (5 fichiers)
+   │       ├── nfo/ (5 fichiers)
+   │       └── collection_report.json
+   │
+   ├── PC1_TestDatabase/
+   │   └── database_results/
+   │       ├── production_orders.json
+   │       ├── error_logs.json
+   │       ├── task_status.json
+   │       ├── machine_statistics.json
+   │       └── extraction_report.json
+   │
+   └── SecurePackages/
+       ├── Siemens_Debug_PC1_TestServer_[date].zip.enc
+       └── PC1_TestServer_package_report.json
+
+═══════════════════════════════════════════════════════════════════════════════
+  FIN DU GUIDE - BONNE CHANCE AVEC VOS TESTS ! 🚀
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,17 @@
+{
+  "MachineId": "AppServer-133841",
+  "MachineType": "ApplicationServer",
+  "MachineIp": "192.168.1.1",
+  "StartTime": "2026-03-10T13:38:51.973822+01:00",
+  "EndTime": "2026-03-10T13:38:56.9738601+01:00",
+  "Success": true,
+  "ErrorMessage": null,
+  "FilesCollected": {
+    "log": 2,
+    "xml": 2,
+    "config": 0,
+    "nfo": 1
+  },
+  "TotalFiles": 5,
+  "Duration": "00:00:05.0000381"
+}

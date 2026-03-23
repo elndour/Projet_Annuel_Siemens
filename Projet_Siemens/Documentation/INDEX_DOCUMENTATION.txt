@@ -1,0 +1,697 @@
+═══════════════════════════════════════════════════════════════════════════════
+  📚 INDEX DE LA DOCUMENTATION - TESTS LOCAUX
+  Environnement de Test Local avec 2 PCs
+  Projet Siemens - Data Collection & Analysis
+═══════════════════════════════════════════════════════════════════════════════
+
+Bienvenue dans la documentation complète de l'environnement de test local !
+
+Ce guide vous aidera à naviguer entre les différents documents disponibles et à
+trouver rapidement l'information dont vous avez besoin.
+
+═══════════════════════════════════════════════════════════════════════════════
+  🚀 PAR OÙ COMMENCER ?
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  VOUS ÊTES...                          COMMENCEZ PAR...                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  🆕 Nouveau sur le projet             ► README_Test_Local.md               │
+│                                        (5 minutes de lecture)               │
+│                                                                             │
+│  🔧 Prêt à installer                  ► CHECKLIST_TEST_RAPIDE.md           │
+│                                        (Guide étape par étape)              │
+│                                                                             │
+│  📖 Besoin de détails complets        ► PROCEDURE_TEST_COMPLETE_           │
+│                                          DETAILLEE.txt                      │
+│                                        (Guide de 40 pages)                  │
+│                                                                             │
+│  🐛 Problème technique                ► TROUBLESHOOTING_GUIDE.md            │
+│                                        (Solutions aux problèmes)            │
+│                                                                             │
+│  ❓ Questions rapides                 ► FAQ_Tests_Locaux.md                │
+│                                        (30 Q&A)                             │
+│                                                                             │
+│  👀 Aperçu visuel du processus        ► DIAGRAMME_FLUX_TESTS.txt           │
+│                                        (Diagrammes ASCII)                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  📁 CATALOGUE DES DOCUMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1️⃣  README_Test_Local.md                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Démarrage rapide                                        │
+│  ⏱️  Durée lecture : 5 minutes                                              │
+│  🎯 Public        : Débutants                                               │
+│  📊 Pages         : 3                                                       │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  • Vue d'ensemble de l'environnement de test                               │
+│  • Prérequis minimaux                                                      │
+│  • Installation express en 4 étapes                                        │
+│  • Premier test en 5 minutes                                               │
+│  • Liens vers les autres guides                                           │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous découvrez le projet                                                │
+│  - Vous voulez une vue d'ensemble rapide                                   │
+│  - Vous cherchez "comment démarrer"                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 2️⃣  CHECKLIST_TEST_RAPIDE.md                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Référence rapide / Checklist                            │
+│  ⏱️  Durée lecture : 10 minutes                                             │
+│  🎯 Public        : Tous niveaux                                            │
+│  📊 Pages         : 5                                                       │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  • Checklist de configuration SSH (4 phases)                               │
+│  • Tableaux récapitulatifs des étapes                                      │
+│  • Commandes PowerShell prêtes à copier                                    │
+│  • Résultats attendus pour chaque test                                     │
+│  • Dépannage express (tableau)                                             │
+│  • Commandes essentielles                                                  │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous voulez une référence rapide                                        │
+│  - Vous avez déjà configuré une fois                                       │
+│  - Vous cherchez une commande spécifique                                   │
+│  - Vous voulez valider votre configuration                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3️⃣  PROCEDURE_TEST_COMPLETE_DETAILLEE.txt                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Guide complet détaillé                                  │
+│  ⏱️  Durée lecture : 45-60 minutes                                          │
+│  🎯 Public        : Installation première fois                              │
+│  📊 Pages         : 40                                                      │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  ═══ PHASE 1 : PRÉPARATION (30 min) ═══                                    │
+│  • Installation OpenSSH Server (étape par étape)                           │
+│  • Configuration pare-feu Windows                                          │
+│  • Création utilisateur de test                                           │
+│  • Tests de connexion SSH                                                  │
+│  • Configuration optionnelle du PC 2                                       │
+│                                                                             │
+│  ═══ PHASE 2 : CONFIGURATION APP (10 min) ═══                             │
+│  • Lancement de l'application                                              │
+│  • Accès au mode test local                                                │
+│  • Génération des fichiers de test                                         │
+│  • Création de la base SQLite                                              │
+│  • Création des machines de test                                           │
+│                                                                             │
+│  ═══ PHASE 3 : TESTS DE COLLECTE (20 min) ═══                             │
+│  • TEST 1 : Collecte SSH/SFTP locale                                       │
+│    - Connexion SSH avec credentials                                        │
+│    - Collecte de 20 fichiers                                               │
+│    - Rapport détaillé                                                      │
+│    - Vérification des résultats                                            │
+│                                                                             │
+│  • TEST 2 : Extraction base de données                                     │
+│    - Connexion SQLite                                                      │
+│    - Exécution de 4 requêtes SQL                                           │
+│    - Génération de fichiers JSON                                           │
+│    - Vérification des données                                              │
+│                                                                             │
+│  • TEST 3 : Collecte SSH distante (PC 2)                                   │
+│    - Connexion SSH réseau local                                            │
+│    - Collecte depuis PC distant                                            │
+│                                                                             │
+│  ═══ PHASE 4 : PACKAGING (5 min) ═══                                      │
+│  • Compression ZIP                                                          │
+│  • Cryptage AES-256                                                        │
+│  • Génération de mot de passe                                              │
+│  • Rapport de packaging                                                    │
+│                                                                             │
+│  ═══ RÉSOLUTION DES PROBLÈMES ═══                                         │
+│  • Problème 1 : Connexion SSH échoue                                       │
+│  • Problème 2 : Ping vers PC 2 échoue                                      │
+│  • Problème 3 : Aucun fichier collecté                                     │
+│  • Problème 4 : Erreur base de données                                     │
+│  • Problème 5 : Permission denied SSH                                      │
+│                                                                             │
+│  ═══ ANNEXES ═══                                                           │
+│  • Commandes PowerShell utiles                                             │
+│  • Gestion du service SSH                                                  │
+│  • Gestion des utilisateurs                                                │
+│  • Configuration réseau                                                     │
+│  • Récapitulatif des tests réussis                                         │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - C'est votre première installation                                       │
+│  - Vous voulez comprendre chaque étape                                     │
+│  - Vous rencontrez un problème spécifique                                  │
+│  - Vous voulez tous les détails techniques                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 4️⃣  TROUBLESHOOTING_GUIDE.md                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Guide de dépannage                                      │
+│  ⏱️  Durée lecture : 20 minutes                                             │
+│  🎯 Public        : Résolution de problèmes                                 │
+│  📊 Pages         : 15                                                      │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  🔐 PROBLÈMES SSH                                                          │
+│  • Impossible de se connecter au serveur                                   │
+│  • Permission denied                                                        │
+│  • Host key verification failed                                            │
+│  • Timeout de connexion                                                    │
+│                                                                             │
+│  🌐 PROBLÈMES RÉSEAU                                                       │
+│  • Ping échoue vers PC 2                                                   │
+│  • Network is unreachable                                                  │
+│  • Firewall bloque la connexion                                            │
+│  • Les 2 PCs ne sont pas sur le même réseau                                │
+│                                                                             │
+│  🗄️ PROBLÈMES BASE DE DONNÉES                                             │
+│  • Impossible de se connecter à la base                                    │
+│  • No such table                                                           │
+│  • Database is locked                                                      │
+│  • Fichier .db corrompu                                                    │
+│                                                                             │
+│  📁 PROBLÈMES DE COLLECTE                                                  │
+│  • Aucun fichier collecté (0 fichiers)                                     │
+│  • Access denied SFTP                                                      │
+│  • Timeout pendant la collecte                                             │
+│  • Chemins de fichiers incorrects                                          │
+│                                                                             │
+│  📦 PROBLÈMES DE PACKAGING                                                 │
+│  • Aucune donnée trouvée pour la machine                                   │
+│  • Erreur lors de la compression ZIP                                       │
+│  • Erreur lors du cryptage                                                 │
+│  • Mot de passe perdu                                                      │
+│                                                                             │
+│  🖥️ PROBLÈMES APPLICATION                                                 │
+│  • FormLocalTestSetup n'apparaît pas                                       │
+│  • Machines de test non visibles                                           │
+│  • NullReferenceException                                                  │
+│  • Erreurs de compilation                                                  │
+│                                                                             │
+│  📊 CAS PRATIQUES                                                          │
+│  • Scénario 1 : Fonctionne sur localhost mais pas PC 2                    │
+│  • Scénario 2 : Collecte OK mais extraction échoue                        │
+│  • Scénario 3 : Package créé mais mot de passe perdu                      │
+│                                                                             │
+│  🆘 COMMANDES D'URGENCE                                                    │
+│  • Réinitialisation complète                                               │
+│  • Diagnostic rapide                                                        │
+│  • Récupération d'erreur                                                   │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous rencontrez une erreur                                              │
+│  - Un test échoue                                                          │
+│  - Vous ne comprenez pas un message d'erreur                               │
+│  - Vous voulez diagnostiquer un problème                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 5️⃣  FAQ_Tests_Locaux.md                                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Questions-Réponses                                      │
+│  ⏱️  Durée lecture : 15 minutes                                             │
+│  🎯 Public        : Tous niveaux                                            │
+│  📊 Pages         : 12 (30 Q&A)                                             │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  🌟 QUESTIONS GÉNÉRALES (Q1-Q4)                                            │
+│  • Pourquoi un environnement de test local ?                               │
+│  • Ai-je besoin de 2 PCs ?                                                 │
+│  • Combien de temps pour la configuration ?                                │
+│  • Compatible Windows 10/11 ?                                              │
+│                                                                             │
+│  🔧 INSTALLATION ET CONFIGURATION (Q5-Q8)                                  │
+│  • SSH déjà installé ?                                                     │
+│  • Utiliser un autre port que 22 ?                                         │
+│  • Quel mot de passe pour testuser ?                                       │
+│  • Utiliser mon propre compte Windows ?                                    │
+│                                                                             │
+│  💻 UTILISATION (Q9-Q13)                                                   │
+│  • Combien de fichiers générés ?                                           │
+│  • Contenu de la base SQLite ?                                             │
+│  • Tester plusieurs fois ?                                                 │
+│  • Que faire des packages créés ?                                          │
+│  • Les données sont-elles réelles ?                                        │
+│                                                                             │
+│  🔒 SÉCURITÉ (Q14-Q17)                                                     │
+│  • Est-ce sécurisé d'installer SSH ?                                       │
+│  • Mon antivirus bloque SSH ?                                              │
+│  • Mot de passe stocké où ?                                                │
+│  • Décrypter un package plus tard ?                                        │
+│                                                                             │
+│  ⚡ PERFORMANCE (Q18-Q20)                                                  │
+│  • Temps de collecte SSH ?                                                 │
+│  • Pourquoi extraction DB plus lente ?                                     │
+│  • Réduire le temps de collecte ?                                          │
+│                                                                             │
+│  🐛 DÉPANNAGE (Q21-Q25)                                                    │
+│  • ssh: command not found ?                                                │
+│  • Connection refused ?                                                     │
+│  • Fichiers non collectés ?                                                │
+│  • Database is locked ?                                                    │
+│  • Réinitialiser complètement ?                                            │
+│                                                                             │
+│  📚 RESSOURCES (Q26-Q28)                                                   │
+│  • Où trouver plus d'infos ?                                               │
+│  • Comment contribuer ?                                                     │
+│  • Vidéos tutorielles ?                                                    │
+│                                                                             │
+│  🎯 CAS D'USAGE (Q29-Q30)                                                  │
+│  • Former de nouveaux développeurs ?                                       │
+│  • Adapter pour d'autres projets ?                                         │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous avez une question précise                                          │
+│  - Vous cherchez une réponse rapide                                        │
+│  - Vous voulez comprendre un concept                                       │
+│  - Vous explorez les possibilités                                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 6️⃣  DIAGRAMME_FLUX_TESTS.txt                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Diagrammes visuels                                      │
+│  ⏱️  Durée lecture : 10 minutes                                             │
+│  🎯 Public        : Apprenants visuels                                      │
+│  📊 Pages         : 10 (diagrammes ASCII)                                   │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  🎨 DIAGRAMMES DE FLUX                                                     │
+│  • Vue d'ensemble des 4 phases                                             │
+│  • Phase 1 : Préparation (flowchart)                                       │
+│  • Phase 2 : Configuration app (flowchart)                                 │
+│  • Phase 3 : Tests de collecte (3 sous-diagrammes)                        │
+│    - Test 1 : SSH/SFTP locale                                              │
+│    - Test 2 : Extraction base de données                                   │
+│    - Test 3 : SSH distante (PC 2)                                          │
+│  • Phase 4 : Packaging et cryptage (flowchart)                            │
+│  • Résultat final (arborescence)                                           │
+│  • Légende des symboles                                                    │
+│                                                                             │
+│  🎯 POINTS DE DÉCISION                                                     │
+│  • PC 2 configuré ? (OUI/NON)                                              │
+│  • Connexion OK ? (OUI/NON)                                                │
+│  • Tests réussis ? (OUI/NON)                                               │
+│  • Mot de passe auto ou manuel ?                                           │
+│                                                                             │
+│  📊 VISUALISATIONS                                                         │
+│  • Arborescence des fichiers créés                                         │
+│  • Timeline des opérations                                                  │
+│  • Points de validation                                                     │
+│  • Chemins d'erreur et de succès                                           │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous êtes un apprenant visuel                                           │
+│  - Vous voulez voir le "big picture"                                       │
+│  - Vous cherchez l'ordre des opérations                                    │
+│  - Vous voulez comprendre les dépendances                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 7️⃣  GUIDE_Configuration_Test_Local_2PCs.txt                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Guide SSH détaillé                                      │
+│  ⏱️  Durée lecture : 30 minutes                                             │
+│  🎯 Public        : Configuration SSH                                       │
+│  📊 Pages         : 10                                                      │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  • Installation OpenSSH Server                                              │
+│  • Configuration utilisateur                                                │
+│  • Tests de connexion                                                       │
+│  • Configuration réseau PC 2                                                │
+│  • Commandes détaillées                                                     │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Focus sur la partie SSH uniquement                                       │
+│  - Configuration réseau 2 PCs                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 8️⃣  ORCHESTRATION_COMPLETE_COLLECTE.md ⭐ NOUVEAU                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Documentation technique architecture                    │
+│  ⏱️  Durée lecture : 25 minutes                                             │
+│  🎯 Public        : Développeurs / Architectes                              │
+│  📊 Pages         : 20                                                      │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  🏗️ ARCHITECTURE DU SYSTÈME                                                │
+│  • Vue d'ensemble du flux de données complet                               │
+│  • Diagramme de l'orchestration (ASCII art)                                │
+│  • Séparation des responsabilités                                          │
+│                                                                             │
+│  📊 FLUX DE COLLECTE SQL                                                   │
+│  • Type "DataBase" → Extraction SQL                                        │
+│  • Classe DatabaseHelper                                                    │
+│  • Requêtes MES prédéfinies (4 requêtes)                                   │
+│  • Structure JSON avec métadonnées                                         │
+│  • Exemple de données production_orders.json                               │
+│                                                                             │
+│  📁 FLUX DE COLLECTE SSH/SFTP                                              │
+│  • Type "TestServer" → Collecte fichiers                                   │
+│  • Classe FileCollector                                                     │
+│  • SSH + SFTP combinés                                                     │
+│  • Collecte par extension (.log, .xml, .config, .nfo)                     │
+│  • Rapport de collecte collection_report.json                             │
+│                                                                             │
+│  🔐 PACKAGING ET CRYPTAGE                                                  │
+│  • SecurePackageManager workflow                                           │
+│  • ZipPackager → Compression                                               │
+│  • AESEncryption → Chiffrement AES-256                                    │
+│  • Génération automatique de mot de passe                                  │
+│  • Structure du package final                                              │
+│                                                                             │
+│  🎬 SCÉNARIOS D'UTILISATION                                                │
+│  • Scénario 1 : Collecte complète serveur MES                             │
+│  • Scénario 2 : Extraction toutes machines                                │
+│  • Timeline détaillée (26 étapes)                                          │
+│                                                                             │
+│  📂 STRUCTURE FINALE                                                       │
+│  • Arborescence complète Data/                                             │
+│  • Tableau comparatif : Base de données vs Fichiers distants              │
+│  • Points clés de l'orchestration                                          │
+│                                                                             │
+│  ✅ AVANTAGES ARCHITECTURE                                                 │
+│  • Séparation des responsabilités                                          │
+│  • Réutilisabilité des composants                                          │
+│  • Extensibilité                                                            │
+│  • Testabilité                                                              │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous voulez comprendre comment tout fonctionne ensemble                 │
+│  - Vous développez une nouvelle fonctionnalité                             │
+│  - Vous devez expliquer l'architecture à quelqu'un                         │
+│  - Vous cherchez où intervenir dans le code                                │
+│  - Vous voulez voir des exemples de données réelles                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 9️⃣  SEQUENCE_DIAGRAM_COLLECTE.txt ⭐ NOUVEAU                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Diagrammes de séquence UML                              │
+│  ⏱️  Durée lecture : 30 minutes                                             │
+│  🎯 Public        : Développeurs / Intégrateurs                             │
+│  📊 Pages         : 25 (diagrammes ASCII)                                   │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  🔄 DIAGRAMME 1 : COLLECTE SSH/SFTP                                        │
+│  • Acteurs : User, FormFileExtraction, SSHHelper, SFTPHelper              │
+│  • 20 étapes détaillées                                                     │
+│  • De la demande de credentials à l'ouverture du dossier résultat         │
+│  • Interactions entre composants                                           │
+│  • Gestion des callbacks de progression                                    │
+│  • Génération du rapport de collecte                                       │
+│                                                                             │
+│  🗄️ DIAGRAMME 2 : EXTRACTION BASE DE DONNÉES                              │
+│  • Acteurs : User, FormFileExtraction, DatabaseHelper, DBConnection       │
+│  • 22 étapes détaillées                                                     │
+│  • Test de connexion Oracle/SQLite                                         │
+│  • Boucle sur les 4 requêtes MES                                           │
+│  • Conversion résultats SQL → JSON                                         │
+│  • Écriture fichiers avec métadonnées                                      │
+│  • Génération ExtractionReport                                             │
+│                                                                             │
+│  🔐 DIAGRAMME 3 : PACKAGING ET CRYPTAGE                                    │
+│  • Acteurs : User, FormFileExtraction, SecurePackageManager, ZipPackager, │
+│    AESEncryption, FileSystem                                               │
+│  • 22 étapes détaillées                                                     │
+│  • Vérification des données à packager                                     │
+│  • Génération/demande de mot de passe                                      │
+│  • Compression ZIP temporaire                                              │
+│  • Chiffrement AES-256 avec Rfc2898                                       │
+│  • Suppression du fichier temporaire                                       │
+│  • Sauvegarde du mot de passe                                              │
+│  • Génération du rapport de packaging                                      │
+│                                                                             │
+│  📋 POINTS CLÉS                                                            │
+│  • Séparation des responsabilités                                          │
+│  • Feedback utilisateur en temps réel                                      │
+│  • Gestion d'erreurs à chaque étape                                        │
+│  • Modularité des composants                                               │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous voulez voir l'ordre exact des appels de méthodes                   │
+│  - Vous déboguez un problème de séquence                                   │
+│  - Vous devez comprendre les interactions entre classes                    │
+│  - Vous écrivez des tests unitaires                                        │
+│  - Vous documentez le code                                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🔟  EXEMPLE_EXTRACTION_COMPLETE.md ⭐ NOUVEAU                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Cas d'usage concret avec vraies données                 │
+│  ⏱️  Durée lecture : 35 minutes                                             │
+│  🎯 Public        : Tous niveaux                                            │
+│  📊 Pages         : 30                                                      │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  🎯 CONTEXTE                                                               │
+│  • Objectif : Extraction complète usine Siemens                            │
+│  • Machines : PC1_TestServer + PC1_TestDatabase                            │
+│  • Date : 2025-01-09                                                        │
+│  • Durée totale : ~30 secondes                                             │
+│                                                                             │
+│  📊 ÉTAPE 1 : COLLECTE SSH/SFTP                                            │
+│  • Configuration (IP, port, credentials)                                    │
+│  • Commande SSH équivalente                                                 │
+│  • 📄 EXEMPLES COMPLETS DE FICHIERS :                                      │
+│    - test_file_001.log (log système avec timestamps)                      │
+│    - test_file_002.xml (config machine Siemens SINUMERIK)                 │
+│    - test_file_003.config (paramètres app MES complets)                   │
+│    - test_file_004.nfo (informations système détaillées)                  │
+│  • Rapport de collecte collection_report.json                             │
+│                                                                             │
+│  📊 ÉTAPE 2 : EXTRACTION BASE DE DONNÉES                                   │
+│  • Configuration SQLite                                                     │
+│  • 🔹 REQUÊTE 1 : Production Orders                                        │
+│    - SQL complet                                                            │
+│    - Résultat JSON avec 150 ordres                                         │
+│    - Analyse : taux de réalisation 98%                                     │
+│  • 🔹 REQUÊTE 2 : Error Logs                                               │
+│    - SQL complet                                                            │
+│    - Résultat JSON avec 342 erreurs                                        │
+│    - Analyse : répartition par sévérité                                    │
+│  • 🔹 REQUÊTE 3 : Task Status                                              │
+│    - SQL complet                                                            │
+│    - Résultat JSON avec 45 tâches actives                                 │
+│    - Analyse : 62% RUNNING, 31% PENDING, 7% ERROR                         │
+│  • 🔹 REQUÊTE 4 : Machine Statistics                                       │
+│    - SQL complet                                                            │
+│    - Résultat JSON avec 15 machines                                        │
+│    - Analyse : MACH-002 la plus fiable (99.5%)                            │
+│  • Rapport d'extraction extraction_report.json                            │
+│                                                                             │
+│  🔐 ÉTAPE 3 : PACKAGING SÉCURISÉ                                           │
+│  • Package 1 : PC1_TestServer                                              │
+│    - Contenu : 20 fichiers                                                 │
+│    - Taille : 2.46 MB (crypté)                                             │
+│    - Mot de passe : XkP9#mN2$vL8@wQ5                                       │
+│  • Package 2 : PC1_TestDatabase                                            │
+│    - Contenu : 4 fichiers JSON                                             │
+│    - Taille : 23 KB (crypté)                                               │
+│    - Mot de passe : mN8@vQ2$kL9#pW3                                        │
+│                                                                             │
+│  📂 STRUCTURE FINALE COMPLÈTE                                              │
+│  • Arborescence détaillée Data/                                            │
+│  • Tailles de fichiers réelles                                             │
+│  • Gain de compression                                                      │
+│                                                                             │
+│  🎯 UTILISATION DES DONNÉES                                                │
+│  • Exemple Python : calcul taux de réalisation                            │
+│  • Exemple Python : détection problèmes par module                         │
+│  • Instructions de décryptage                                               │
+│                                                                             │
+│  📊 RÉSUMÉ FINAL                                                           │
+│  • Tableau récapitulatif de toutes les métriques                           │
+│  • Points clés de l'extraction                                             │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous voulez voir à quoi ressemblent les vraies données                 │
+│  - Vous devez démontrer le système à quelqu'un                            │
+│  - Vous préparez une présentation                                          │
+│  - Vous voulez comprendre le format des résultats                          │
+│  - Vous cherchez des exemples concrets pour vos tests                     │
+│  - Vous développez des scripts d'analyse des données                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1️⃣1️⃣  CORRECTIFS_2025-01-09.txt                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📄 Type          : Notes de version                                        │
+│  ⏱️  Durée lecture : 5 minutes                                              │
+│  🎯 Public        : Développeurs                                            │
+│  📊 Pages         : 2                                                       │
+│                                                                             │
+│  📝 CONTENU :                                                               │
+│  • Liste des problèmes corrigés                                            │
+│  • Fichiers modifiés                                                        │
+│  • Fonctionnalités ajoutées                                                 │
+│  • Build status                                                             │
+│                                                                             │
+│  ✅ UTILISEZ CE DOCUMENT SI :                                              │
+│  - Vous voulez voir les changements récents                                │
+│  - Vous mettez à jour votre version                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  🗺️ PARCOURS RECOMMANDÉS
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 1 : DÉCOUVERTE RAPIDE (20 minutes)                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. README_Test_Local.md                    (5 min)                         │
+│  2. CHECKLIST_TEST_RAPIDE.md                (10 min)                        │
+│  3. FAQ_Tests_Locaux.md (sections Q1-Q4)    (5 min)                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 2 : INSTALLATION PREMIÈRE FOIS (1h30)                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. README_Test_Local.md                    (5 min)                         │
+│  2. PROCEDURE_TEST_COMPLETE_DETAILLEE.txt   (60 min - suivre pas à pas)    │
+│  3. FAQ_Tests_Locaux.md                     (15 min - référence)           │
+│  4. TROUBLESHOOTING_GUIDE.md                (10 min - si besoin)           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 3 : RÉSOLUTION D'UN PROBLÈME (30 minutes)                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. FAQ_Tests_Locaux.md                     (5 min - chercher Q&A)         │
+│  2. TROUBLESHOOTING_GUIDE.md                (20 min - diagnostic)          │
+│  3. PROCEDURE_TEST_COMPLETE_DETAILLEE.txt   (5 min - section spécifique)  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 4 : RÉFÉRENCE RAPIDE (5 minutes)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. CHECKLIST_TEST_RAPIDE.md                (3 min - commandes)            │
+│  2. FAQ_Tests_Locaux.md                     (2 min - question précise)     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 5 : COMPRENDRE L'ARCHITECTURE ⭐ NOUVEAU (1h30)                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. ORCHESTRATION_COMPLETE_COLLECTE.md      (25 min - vue d'ensemble)     │
+│  2. SEQUENCE_DIAGRAM_COLLECTE.txt           (30 min - diagrammes UML)     │
+│  3. EXEMPLE_EXTRACTION_COMPLETE.md          (35 min - cas concret)         │
+│                                                                             │
+│  🎯 Ce parcours est idéal pour :                                           │
+│  • Développeurs rejoignant le projet                                       │
+│  • Architectes devant comprendre le système                                │
+│  • Personnes devant expliquer/présenter le projet                          │
+│  • Développeurs ajoutant de nouvelles fonctionnalités                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 6 : VOIR DES EXEMPLES CONCRETS ⭐ NOUVEAU (40 minutes)             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. EXEMPLE_EXTRACTION_COMPLETE.md          (35 min - données réelles)     │
+│  2. ORCHESTRATION_COMPLETE_COLLECTE.md      (5 min - section "Scénarios") │
+│                                                                             │
+│  🎯 Ce parcours est idéal pour :                                           │
+│  • Comprendre à quoi ressemblent les vraies données                        │
+│  • Préparer une démonstration du système                                   │
+│  • Développer des scripts d'analyse de données                             │
+│  • Valider que votre extraction produit les bons résultats                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PARCOURS 5 : COMPRÉHENSION VISUELLE (15 minutes)                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  1. DIAGRAMME_FLUX_TESTS.txt                (10 min - diagrammes)          │
+│  2. CHECKLIST_TEST_RAPIDE.md                (5 min - tableaux)             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  🔍 RECHERCHE RAPIDE PAR MOT-CLÉ
+═══════════════════════════════════════════════════════════════════════════════
+
+SSH
+  └─ Installation            → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Phase 1)
+  └─ Configuration           → GUIDE_Configuration_Test_Local_2PCs.txt
+  └─ Erreur connexion        → TROUBLESHOOTING_GUIDE.md (Problèmes SSH)
+  └─ Commandes               → CHECKLIST_TEST_RAPIDE.md (Commandes essentielles)
+
+RÉSEAU
+  └─ Ping échoue             → TROUBLESHOOTING_GUIDE.md (Problèmes Réseau)
+  └─ Configuration 2 PCs     → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Étape 1.4)
+  └─ Trouver IP locale       → FAQ_Tests_Locaux.md (Q26)
+
+BASE DE DONNÉES
+  └─ Création SQLite         → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Étape 2.2)
+  └─ Extraction de données   → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Test 2)
+  └─ Erreur connexion        → TROUBLESHOOTING_GUIDE.md (Problèmes DB)
+  └─ Structure des tables    → FAQ_Tests_Locaux.md (Q10)
+
+COLLECTE DE FICHIERS
+  └─ SSH/SFTP locale         → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Test 1)
+  └─ Aucun fichier collecté  → TROUBLESHOOTING_GUIDE.md (Problèmes Collecte)
+  └─ Nombre de fichiers      → FAQ_Tests_Locaux.md (Q9)
+
+PACKAGING
+  └─ Créer un package        → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Phase 4)
+  └─ Cryptage AES-256        → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Étape 4.1)
+  └─ Mot de passe perdu      → TROUBLESHOOTING_GUIDE.md (Scénario 3)
+
+COMMANDES POWERSHELL
+  └─ Liste complète          → PROCEDURE_TEST_COMPLETE_DETAILLEE.txt (Annexe)
+  └─ Référence rapide        → CHECKLIST_TEST_RAPIDE.md (Commandes essentielles)
+  └─ Urgence                 → TROUBLESHOOTING_GUIDE.md (Commandes d'urgence)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  📞 CONTACT ET SUPPORT
+═══════════════════════════════════════════════════════════════════════════════
+
+Documentation créée le : 2025-01-09
+Version                : 1.0
+Projet                 : Projet Siemens - Data Collection & Analysis
+
+Pour toute question ou suggestion d'amélioration de la documentation :
+- GitHub Issues  : https://github.com/elndour/Projet_Annuel_Siemens
+- Email équipe   : [contact équipe dev]
+
+═══════════════════════════════════════════════════════════════════════════════
+  🎯 RÉSUMÉ DES DOCUMENTS (Tableau Récapitulatif)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────────────┬─────────┬────────┬──────────┬──────────────┐
+│ DOCUMENT                     │ PAGES   │ TEMPS  │ PUBLIC   │ UTILISATION  │
+├──────────────────────────────┼─────────┼────────┼──────────┼──────────────┤
+│ README_Test_Local.md         │ 3       │ 5 min  │ Débutant │ Vue d'ens.   │
+│ CHECKLIST_TEST_RAPIDE.md     │ 5       │ 10 min │ Tous     │ Référence    │
+│ PROCEDURE_... _DETAILLEE.txt │ 40      │ 60 min │ Install  │ Guide étapes │
+│ TROUBLESHOOTING_GUIDE.md     │ 15      │ 20 min │ Problème │ Dépannage    │
+│ FAQ_Tests_Locaux.md          │ 12      │ 15 min │ Tous     │ Q&A          │
+│ DIAGRAMME_FLUX_TESTS.txt     │ 10      │ 10 min │ Visuel   │ Flowcharts   │
+│ GUIDE_... _2PCs.txt          │ 10      │ 30 min │ SSH      │ Config SSH   │
+│ CORRECTIFS_2025-01-09.txt    │ 2       │ 5 min  │ Dev      │ Changelog    │
+└──────────────────────────────┴─────────┴────────┴──────────┴──────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+  🚀 BONNE CHANCE AVEC VOS TESTS !
+═══════════════════════════════════════════════════════════════════════════════

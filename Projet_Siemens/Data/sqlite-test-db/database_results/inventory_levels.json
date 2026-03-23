@@ -1,7 +1,7 @@
 {
   "metadata": {
     "queryName": "Inventory Levels",
-    "extractionDate": "2026-02-27 22:10:35",
+    "extractionDate": "2026-03-10 13:35:48",
     "database": "SQLite MES Test",
     "server": "Local File",
     "rowCount": 3,
@@ -27,7 +27,7 @@
       "min_quantity": 100,
       "max_quantity": 500,
       "unit_of_measure": "KG",
-      "last_updated": "2026-02-27 21:07:07",
+      "last_updated": "2026-03-10 12:35:25",
       "warehouse_location": "WAREHOUSE-A"
     },
     {
@@ -38,7 +38,7 @@
       "min_quantity": 150,
       "max_quantity": 600,
       "unit_of_measure": "METERS",
-      "last_updated": "2026-02-27 21:07:07",
+      "last_updated": "2026-03-10 12:35:25",
       "warehouse_location": "WAREHOUSE-B"
     },
     {
@@ -49,7 +49,7 @@
       "min_quantity": 100,
       "max_quantity": 400,
       "unit_of_measure": "KG",
-      "last_updated": "2026-02-27 21:07:07",
+      "last_updated": "2026-03-10 12:35:25",
       "warehouse_location": "WAREHOUSE-A"
     }
   ]

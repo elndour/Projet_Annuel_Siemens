@@ -1,26 +1,5 @@
 {
-  "DataBases": [
-    {
-      "sshPort": 22,
-      "instanceName": null,
-      "username": "admin",
-      "password": "password",
-      "ip": "192.168.1.1",
-      "id": "Database-victor",
-      "type": "DataBase",
-      "displayName": "DataBase : Database-victor"
-    },
-    {
-      "sshPort": 22,
-      "instanceName": null,
-      "username": "admin",
-      "password": "password",
-      "ip": "192.168.1.1",
-      "id": "Database-210914",
-      "type": "DataBase",
-      "displayName": "DataBase : Database-210914"
-    }
-  ],
+  "DataBases": [],
   "ApplicationServers": [],
   "WebServers": [],
   "PresentationServers": [],

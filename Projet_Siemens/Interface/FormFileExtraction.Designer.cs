@@ -30,6 +30,7 @@
         {
             extractedFilesPanel = new FlowLayoutPanel();
             panel1 = new Panel();
+            testModeButton = new Button();
             packageButton = new Button();
             sshServ = new CheckBox();
             kindOdextractionButton = new Button();
@@ -48,6 +49,7 @@
             // panel1 (Colonne Gauche : Sélection)
             // 
             panel1.BackColor = Color.FromArgb(240, 242, 245);
+            panel1.Controls.Add(testModeButton);
             panel1.Controls.Add(packageButton);
             panel1.Controls.Add(sshServ);
             panel1.Controls.Add(kindOdextractionButton);
@@ -116,6 +118,20 @@
             packageButton.Text = "📦 Package & Encrypt";
             packageButton.UseVisualStyleBackColor = false;
             packageButton.Click += packageButton_Click;
+            // 
+            // testModeButton
+            // 
+            testModeButton.BackColor = Color.FromArgb(52, 152, 219);
+            testModeButton.FlatStyle = FlatStyle.Flat;
+            testModeButton.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            testModeButton.ForeColor = Color.White;
+            testModeButton.Location = new Point(15, 380);
+            testModeButton.Name = "testModeButton";
+            testModeButton.Size = new Size(190, 50);
+            testModeButton.TabIndex = 14;
+            testModeButton.Text = "🧪 Mode Test Local\r\n(2 PCs)";
+            testModeButton.UseVisualStyleBackColor = false;
+            testModeButton.Click += testModeButton_Click;
             // 
             // panel2 (Colonne Milieu : Paramètres)
             // 
@@ -217,6 +233,7 @@
         private ComboBox machinesList;
         private Button kindOdextractionButton;
         private Button packageButton;
+        private Button testModeButton;
         private Panel panel2;
         private CheckBox sshServ;
         private Label label2;

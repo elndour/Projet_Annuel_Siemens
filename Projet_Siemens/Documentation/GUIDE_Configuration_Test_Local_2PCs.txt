@@ -1,0 +1,314 @@
+═══════════════════════════════════════════════════════════════════════════════
+  GUIDE DE CONFIGURATION : ENVIRONNEMENT DE TEST LOCAL AVEC 2 PCS
+  Projet Siemens - Data Collection & Analysis
+═══════════════════════════════════════════════════════════════════════════════
+
+📌 OBJECTIF
+-----------
+Ce guide vous aide à configurer vos 2 ordinateurs personnels comme environnement
+de test pour le système de collecte de données Siemens sans avoir besoin de 
+serveurs réels ou de bases de données de production.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PARTIE 1 : CONFIGURATION DU PC 1 (Votre ordinateur principal)
+═══════════════════════════════════════════════════════════════════════════════
+
+🔧 ÉTAPE 1 : Installation d'OpenSSH Server
+-------------------------------------------
+1. Ouvrir PowerShell en tant qu'Administrateur :
+   - Clic droit sur le menu Démarrer
+   - Sélectionner "Windows PowerShell (Admin)" ou "Terminal (Admin)"
+
+2. Installer OpenSSH Server :
+   
+   Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+3. Démarrer le service SSH :
+   
+   Start-Service sshd
+   Set-Service -Name sshd -StartupType 'Automatic'
+
+4. Configurer le pare-feu pour autoriser SSH :
+   
+   New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' `
+       -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+
+5. Vérifier que le service est actif :
+   
+   Get-Service sshd
+
+
+🔧 ÉTAPE 2 : Créer un utilisateur de test
+------------------------------------------
+1. Créer l'utilisateur "testuser" :
+   
+   net user testuser test123 /add
+
+2. Ajouter aux administrateurs (optionnel, pour accès complet) :
+   
+   net localgroup Administrators testuser /add
+
+3. Tester la connexion SSH en local :
+   
+   ssh testuser@localhost
+   
+   (Mot de passe : test123)
+
+
+🔧 ÉTAPE 3 : Utiliser l'application pour générer des données de test
+---------------------------------------------------------------------
+1. Lancer l'application Projet_Siemens
+
+2. Dans FormFileExtraction, cliquer sur le bouton :
+   🧪 Mode Test Local (2 PCs)
+
+3. Dans la fenêtre qui s'ouvre, pour le PC 1 :
+   ✅ Cliquer sur "📁 Générer fichiers de test (20 fichiers)"
+      → Crée 20 fichiers (.log, .xml, .config, .nfo) dans TestData/PC1_TestServer/
+   
+   ✅ Cliquer sur "🗄️ Créer base de données SQLite de test"
+      → Crée une base SQLite avec des données MES simulées
+
+4. Vérifier que les fichiers ont été créés :
+   - Localisation : [Projet]\TestData\PC1_TestServer\test_files\
+   - Base de données : [Projet]\TestData\PC1_TestDatabase\database\test_mes_database.db
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PARTIE 2 : CONFIGURATION DU PC 2 (Deuxième ordinateur)
+═══════════════════════════════════════════════════════════════════════════════
+
+🔧 ÉTAPE 1 : Installer SSH sur le PC 2
+---------------------------------------
+Répéter les mêmes étapes que pour le PC 1 (Partie 1, Étapes 1 et 2)
+
+
+🔧 ÉTAPE 2 : Trouver l'adresse IP du PC 2
+------------------------------------------
+1. Sur le PC 2, ouvrir PowerShell ou CMD
+
+2. Exécuter la commande :
+   
+   ipconfig
+
+3. Noter l'adresse IPv4 de la carte réseau active
+   Exemple : 192.168.1.105
+   
+   ⚠️ IMPORTANT : Les deux PCs doivent être sur le MÊME RÉSEAU LOCAL
+                  (même WiFi ou connectés au même routeur)
+
+
+🔧 ÉTAPE 3 : Tester la connectivité entre les PCs
+--------------------------------------------------
+1. Depuis le PC 1, tester le ping vers le PC 2 :
+   
+   ping [IP_DU_PC2]
+   
+   Exemple : ping 192.168.1.105
+
+2. Si le ping échoue, vérifier :
+   ❌ Le pare-feu du PC 2 bloque peut-être les pings
+   ❌ Les deux PCs ne sont peut-être pas sur le même réseau
+   ❌ L'IP saisie est peut-être incorrecte
+
+3. Tester la connexion SSH depuis le PC 1 vers le PC 2 :
+   
+   ssh testuser@[IP_DU_PC2]
+   
+   Exemple : ssh testuser@192.168.1.105
+   Mot de passe : test123
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PARTIE 3 : CRÉER LES MACHINES DE TEST DANS L'APPLICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 ÉTAPE 1 : Configurer dans l'application
+-------------------------------------------
+1. Dans FormFileExtraction, cliquer sur :
+   🧪 Mode Test Local (2 PCs)
+
+2. Dans la section "💻 PC 2 - Deuxième ordinateur" :
+   - Entrer l'adresse IP du PC 2 (ex: 192.168.1.105)
+   - Cliquer sur "🔌 Tester la connexion"
+   - Vérifier que le statut devient "✓ Connecté"
+
+3. Cliquer sur le bouton vert :
+   ✅ Créer les machines de test dans le réseau
+
+4. Confirmer la création → Les machines suivantes sont ajoutées :
+   • PC1_TestServer (127.0.0.1) - Serveur de test local
+   • PC1_TestDatabase (127.0.0.1) - Base SQLite de test
+   • PC2_TestServer ([IP_PC2]) - Serveur distant de test
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PARTIE 4 : TESTER LA COLLECTE DE DONNÉES
+═══════════════════════════════════════════════════════════════════════════════
+
+🧪 TEST 1 : Collecte de fichiers SSH/SFTP (PC 1 - localhost)
+-------------------------------------------------------------
+1. Dans FormFileExtraction, sélectionner : "TestServer : PC1_TestServer"
+
+2. Cliquer sur "Extract Data"
+
+3. Entrer les credentials SSH :
+   - Username : testuser
+   - Password : test123
+   - Port : 22
+
+4. Confirmer la collecte
+
+5. Vérifier les résultats dans : Data/PC1_TestServer/files/
+
+
+🧪 TEST 2 : Extraction de base de données SQLite
+--------------------------------------------------
+1. Sélectionner : "DataBase : PC1_TestDatabase"
+
+2. Cliquer sur "Extract Data"
+
+3. Confirmer l'extraction
+
+4. Vérifier les résultats dans : Data/PC1_TestDatabase/database_results/
+
+
+🧪 TEST 3 : Collecte depuis le PC 2 (réseau distant)
+-----------------------------------------------------
+1. Sélectionner : "TestServer : PC2_TestServer"
+
+2. Cliquer sur "Extract Data"
+
+3. Entrer les credentials SSH du PC 2 :
+   - Username : testuser
+   - Password : test123
+   - Port : 22
+
+4. La collecte va chercher les fichiers sur le PC 2 via SSH
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PARTIE 5 : RÉSOLUTION DES PROBLÈMES COURANTS
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ PROBLÈME : "Impossible de se connecter au serveur"
+------------------------------------------------------
+✅ SOLUTIONS :
+   1. Vérifier que le service SSH est démarré :
+      Get-Service sshd
+   
+   2. Redémarrer le service SSH :
+      Restart-Service sshd
+   
+   3. Vérifier le pare-feu Windows
+   
+   4. Tester avec : ssh testuser@localhost
+
+
+❌ PROBLÈME : "Ping échoue vers le PC 2"
+-----------------------------------------
+✅ SOLUTIONS :
+   1. Désactiver temporairement le pare-feu du PC 2 pour tester
+   
+   2. Créer une règle de pare-feu pour autoriser ICMP :
+      New-NetFirewallRule -DisplayName "Allow ICMP" `
+          -Direction Inbound -Protocol ICMPv4 -IcmpType 8 -Action Allow
+   
+   3. Vérifier que les deux PCs sont sur le même réseau
+
+
+❌ PROBLÈME : "SSH demande une clé ou refuse le mot de passe"
+--------------------------------------------------------------
+✅ SOLUTIONS :
+   1. Éditer le fichier de configuration SSH :
+      notepad C:\ProgramData\ssh\sshd_config
+   
+   2. S'assurer que ces lignes sont présentes et décommentées :
+      PasswordAuthentication yes
+      PubkeyAuthentication yes
+   
+   3. Redémarrer le service SSH :
+      Restart-Service sshd
+
+
+❌ PROBLÈME : "Aucun fichier collecté"
+---------------------------------------
+✅ SOLUTIONS :
+   1. Vérifier que les fichiers de test ont été générés
+   
+   2. Vérifier les chemins par défaut de collecte SSH
+   
+   3. Créer manuellement des fichiers dans :
+      C:\TestData\Siemens_Files\
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  PARTIE 6 : ÉTENDRE L'ENVIRONNEMENT DE TEST
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 AJOUTER PLUS DE FICHIERS DE TEST
+------------------------------------
+Dans l'application, vous pouvez régénérer autant de fichiers que vous voulez.
+Modifier le nombre dans TestEnvironmentSetup.cs :
+
+    testSetup.GenerateTestFiles("PC1_TestServer", 100);  // 100 fichiers
+
+
+🚀 PERSONNALISER LES CHEMINS DE COLLECTE
+-----------------------------------------
+Modifier les chemins SSH dans FileCollector.cs pour pointer vers vos 
+dossiers personnalisés.
+
+
+🚀 AJOUTER UN 3ÈME PC
+----------------------
+Modifier TestEnvironmentSetup.cs et ajouter :
+
+    var pc3Server = new Machine(
+        ip: "192.168.1.XXX",
+        id: "PC3_TestServer",
+        type: "TestServer"
+    );
+    TestMachines.Add(pc3Server);
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  ANNEXE : COMMANDES UTILES
+═══════════════════════════════════════════════════════════════════════════════
+
+📌 Vérifier l'état SSH :
+   Get-Service sshd
+
+📌 Redémarrer SSH :
+   Restart-Service sshd
+
+📌 Voir les connexions SSH actives :
+   netstat -an | findstr :22
+
+📌 Tester la connexion SSH :
+   ssh testuser@localhost
+   ssh testuser@[IP_PC2]
+
+📌 Trouver votre IP locale :
+   ipconfig | findstr IPv4
+
+📌 Lister les utilisateurs Windows :
+   net user
+
+📌 Supprimer l'utilisateur de test :
+   net user testuser /delete
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  CONTACT & SUPPORT
+═══════════════════════════════════════════════════════════════════════════════
+
+Si vous rencontrez des problèmes :
+1. Consulter la section "Résolution des problèmes"
+2. Vérifier les logs dans l'application
+3. Contacter l'équipe de développement
+
+Version du document : 1.0
+Dernière mise à jour : 2025-01-09
+═══════════════════════════════════════════════════════════════════════════════

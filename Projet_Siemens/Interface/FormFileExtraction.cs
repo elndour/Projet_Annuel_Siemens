@@ -193,8 +193,14 @@ namespace Projet_Siemens.Interface
         /// <summary>
         /// Extrait les données MES depuis une base de données et les sauvegarde en JSON
         /// </summary>
-        private void ExtractDatabaseData(DataBase dbMachine)
+        private void ExtractDatabaseData(DataBase? dbMachine)
         {
+            if (dbMachine == null)
+            {
+                MessageBox.Show("La machine sélectionnée n'est pas une base de données valide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
                 // Créer la connexion
@@ -451,6 +457,31 @@ namespace Projet_Siemens.Interface
                     "Erreur",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Ouvre le configurateur d'environnement de test local
+        /// </summary>
+        private void testModeButton_Click(object sender, EventArgs e)
+        {
+            var testSetupForm = new FormLocalTestSetup(parentForm);
+            testSetupForm.ShowDialog();
+
+            // Rafraîchir la liste des machines si des machines de test ont été ajoutées
+            if (testSetupForm.DialogResult == DialogResult.OK)
+            {
+                machinesList.DataSource = null;
+                machinesList.DataSource = new BindingList<Machine>(parentForm.network.machines);
+                machinesList.DisplayMember = "displayName";
+
+                MessageBox.Show(
+                    "Machines de test ajoutées avec succès !\n\n" +
+                    "Vous pouvez maintenant les sélectionner dans la liste et tester la collecte de données.",
+                    "Environnement de test prêt",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
                 );
             }
         }

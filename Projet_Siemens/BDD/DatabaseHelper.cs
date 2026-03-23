@@ -503,7 +503,8 @@ namespace Projet_Siemens.BDD
     [Serializable]
     public class DatabaseHelperException : Exception
     {
+        public DatabaseHelperException() { }
         public DatabaseHelperException(string message) : base(message) { }
-        protected DatabaseHelperException(SerializationInfo info, StreamingContext ctxt) : base(info, ctxt) { }
+        public DatabaseHelperException(string message, Exception inner) : base(message, inner) { }
     }
 }

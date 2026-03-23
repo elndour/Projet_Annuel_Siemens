@@ -1,0 +1,35 @@
+System Information File - Test #005
+Generated: 2026-03-23 12:30:03
+
+===========================================
+SYSTEM DETAILS
+===========================================
+Machine ID: TEST_MACHINE_005
+Operating System: Windows Server 2022
+CPU: Intel Xeon E5-2680 v4
+RAM: 64 GB
+Disk Space: 2 TB SSD
+
+===========================================
+SIEMENS MES INSTALLATION
+===========================================
+Installation Date: 2026-03-18
+Version: 8.0.5
+License Type: Test/Development
+License Expiry: 2027-03-23
+
+===========================================
+NETWORK CONFIGURATION
+===========================================
+IP Address: 192.168.1.105
+Subnet Mask: 255.255.255.0
+Gateway: 192.168.1.1
+DNS: 8.8.8.8
+
+===========================================
+PERFORMANCE METRICS (Last 24h)
+===========================================
+Uptime: 99.95%
+Average CPU: 25%
+Average Memory: 45%
+Network Throughput: 55 Mbps
