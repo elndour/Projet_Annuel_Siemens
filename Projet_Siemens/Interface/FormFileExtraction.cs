@@ -19,12 +19,18 @@ namespace Projet_Siemens.Interface
     {
         private Form2 parentForm;
 
-        public FormFileExtraction(Form2 parentForm)
+        public FormFileExtraction(Form2 parentForm, Machine selectedMachine = null)
         {
             InitializeComponent();
             this.parentForm = parentForm;
+
             machinesList.DataSource = new BindingList<Machine>(parentForm.network.machines);
             machinesList.DisplayMember = "displayName";
+
+            if (selectedMachine != null)
+            {
+                machinesList.SelectedItem = parentForm.network.machines.FirstOrDefault(m => m.id == selectedMachine.id);
+            }
         }
 
         private void kindOdextractionButton_Click(object sender, EventArgs e)

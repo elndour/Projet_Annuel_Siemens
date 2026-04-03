@@ -1,0 +1,17 @@
+{
+  "MachineId": "PC2_TestServer",
+  "MachineType": "TestServer",
+  "MachineIp": "172.20.10.5",
+  "StartTime": "2026-04-03T15:55:49.9654586+02:00",
+  "EndTime": "2026-04-03T15:56:31.102384+02:00",
+  "Success": true,
+  "ErrorMessage": null,
+  "FilesCollected": {
+    "log": 0,
+    "xml": 1,
+    "config": 0,
+    "nfo": 0
+  },
+  "TotalFiles": 1,
+  "Duration": "00:00:41.1369254"
+}

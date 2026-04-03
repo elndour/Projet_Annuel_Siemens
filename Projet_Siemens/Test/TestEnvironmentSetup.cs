@@ -48,6 +48,7 @@ namespace Projet_Siemens.Test
                 sshPort: 22,
                 password: "test123",
                 username: "testuser",
+                instanceName: "ORCL",
                 type: "DataBase"
             );
             TestMachines.Add(pc1Database);

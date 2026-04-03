@@ -1,0 +1,9 @@
+{
+  "Hostname": "DESKTOP-C4HI2R8",
+  "OS": "STDOUT:\n\n\nSTDERR:\n\u0027cat\u0027 n\u0027est pas reconnu en tant que commande interne\r\nou externe, un programme ex\uFFFDcutable ou un fichier de commandes.",
+  "Kernel": "STDOUT:\n\n\nSTDERR:\n\u0027uname\u0027 n\u0027est pas reconnu en tant que commande interne\r\nou externe, un programme ex\uFFFDcutable ou un fichier de commandes.",
+  "Uptime": "STDOUT:\n\n\nSTDERR:\n\u0027uptime\u0027 n\u0027est pas reconnu en tant que commande interne\r\nou externe, un programme ex\uFFFDcutable ou un fichier de commandes.",
+  "CPU": "STDOUT:\n\n\nSTDERR:\n\u0027lscpu\u0027 n\u0027est pas reconnu en tant que commande interne\r\nou externe, un programme ex\uFFFDcutable ou un fichier de commandes.",
+  "RAM": "STDOUT:\n\n\nSTDERR:\n\u0027free\u0027 n\u0027est pas reconnu en tant que commande interne\r\nou externe, un programme ex\uFFFDcutable ou un fichier de commandes.",
+  "Disk": "STDOUT:\n\n\nSTDERR:\n\u0027df\u0027 n\u0027est pas reconnu en tant que commande interne\r\nou externe, un programme ex\uFFFDcutable ou un fichier de commandes."
+}

@@ -282,16 +282,65 @@ Vous pouvez quand même utiliser uniquement le PC 1 (localhost) pour vos tests.
 
         private void generateFilesPC2Button_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Cette fonctionnalité nécessite une connexion SSH active au PC 2.\n\n" +
-                "Pour le moment, générez les fichiers manuellement sur le PC 2 en :\n" +
-                "1. Copiant TestEnvironmentSetup.cs sur le PC 2\n" +
-                "2. Exécutant la génération de fichiers localement\n\n" +
-                "OU utilisez uniquement le PC 1 pour vos tests.",
-                "Information",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            try
+            {
+                generateFilesPC2Button.Enabled = false;
+                generateFilesPC2Button.Text = "Génération...";
+                this.Cursor = Cursors.WaitCursor;
+
+                // Générer les fichiers de test pour PC2 localement (sans SFTP)
+                testSetup.GenerateTestFiles("PC2_TestServer", 20);
+
+                string pc2TestDir = Path.Combine(testSetup.BaseDirectory, "PC2_TestServer", "test_files");
+
+                if (Directory.Exists(pc2TestDir))
+                {
+                    var files = Directory.GetFiles(pc2TestDir);
+                    reportTextBox.Text = $@"✅ FICHIERS PC2 GÉNÉRÉS LOCALEMENT
+
+📁 Emplacement : {pc2TestDir}
+
+Fichiers créés : {files.Length}
+• Fichiers .log - Journaux système simulés
+• Fichiers .xml - Configurations XML
+• Fichiers .config - Fichiers de paramètres
+• Fichiers .nfo - Informations système
+
+Vous pouvez maintenant tester la collecte depuis PC2_TestServer.
+La collecte lira directement ce dossier local.
+";
+
+                    pc2StatusLabel.Text = "✓ Fichiers générés";
+                    pc2StatusLabel.ForeColor = Color.Green;
+
+                    MessageBox.Show(
+                        $"{files.Length} fichiers de test générés pour PC2 !\n\n" +
+                        $"Dossier : {pc2TestDir}",
+                        "Succès",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+                else
+                {
+                    throw new Exception($"Le dossier {pc2TestDir} n'a pas pu être créé.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Erreur lors de la génération :\n{ex.Message}",
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+            finally
+            {
+                generateFilesPC2Button.Enabled = true;
+                generateFilesPC2Button.Text = "📁 Générer fichiers de test PC2 (20 fichiers)";
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void setupGuideButton_Click(object sender, EventArgs e)

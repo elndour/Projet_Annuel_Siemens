@@ -192,7 +192,7 @@ namespace Projet_Siemens.Class
                         machines.Add(machine);
 
                         // Ajout de la partie DataBase dans dataBases
-                        DataBase database = new DataBase(db.id, db.ip, db.sshPort, db.password, db.username, db.instanceName);
+                        DataBase database = new DataBase(db.id, db.ip, db.sshPort, db.password, db.username, db.instanceName, "DataBase");
                         dataBases.Add(database);
                     }
                 }

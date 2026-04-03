@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <System>
+        <Name>Siemens MES Test System</Name>
+        <Version>8.1.1</Version>
+        <Environment>Test</Environment>
+    </System>
+    <Database>
+        <Server>localhost</Server>
+        <Port>1433</Port>
+        <DatabaseName>MES_Test_001</DatabaseName>
+        <Timeout>30</Timeout>
+    </Database>
+    <Network>
+        <Enabled>true</Enabled>
+        <Port>8001</Port>
+        <MaxConnections>100</MaxConnections>
+    </Network>
+    <Logging>
+        <Level>INFO</Level>
+        <MaxFileSize>10485760</MaxFileSize>
+        <RetentionDays>30</RetentionDays>
+    </Logging>
+</Configuration>

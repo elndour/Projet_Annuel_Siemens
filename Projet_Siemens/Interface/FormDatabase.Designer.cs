@@ -50,9 +50,11 @@
             dataBasePanel.Controls.Add(dataBaseSshPort);
             dataBasePanel.Controls.Add(dataBaseIpAdress);
             dataBasePanel.Controls.Add(dataBaseName);
+            dataBasePanel.Controls.Add(label6);
+            dataBasePanel.Controls.Add(dataBaseInstanceName);
             dataBasePanel.Location = new Point(167, 45);
             dataBasePanel.Name = "dataBasePanel";
-            dataBasePanel.Size = new Size(467, 360);
+            dataBasePanel.Size = new Size(467, 410);
             dataBasePanel.TabIndex = 0;
             // 
             // titleLabel
@@ -146,16 +148,32 @@
             dataBasemotdepasse.Size = new Size(236, 27);
             dataBasemotdepasse.TabIndex = 5;
             // 
+            // label6 (Instance Name)
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 9F, FontStyle.Regular); // Gras enlevé
+            label6.Location = new Point(60, 310);
+            label6.Name = "label6";
+            label6.Size = new Size(100, 20);
+            label6.Text = "Instance Name";
+            // 
+            // dataBaseInstanceName
+            // 
+            dataBaseInstanceName.Location = new Point(176, 307);
+            dataBaseInstanceName.Name = "dataBaseInstanceName";
+            dataBaseInstanceName.Size = new Size(236, 27);
+            dataBaseInstanceName.TabIndex = 6;
+            // 
             // newDataBaseButton
             // 
             newDataBaseButton.BackColor = Color.FromArgb(0, 101, 110);
             newDataBaseButton.FlatStyle = FlatStyle.Flat;
             newDataBaseButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular); // Gras enlevé
             newDataBaseButton.ForeColor = Color.White;
-            newDataBaseButton.Location = new Point(176, 305);
+            newDataBaseButton.Location = new Point(176, 359);
             newDataBaseButton.Name = "newDataBaseButton";
             newDataBaseButton.Size = new Size(236, 35);
-            newDataBaseButton.TabIndex = 6;
+            newDataBaseButton.TabIndex = 7;
             newDataBaseButton.Text = "SUBMIT";
             newDataBaseButton.UseVisualStyleBackColor = false;
             newDataBaseButton.Click += newDataBaseButton_Click;
@@ -189,6 +207,8 @@
         private TextBox dataBaseusername;
         private Label label5;
         private TextBox dataBasemotdepasse;
+        private Label label6;
+        private TextBox dataBaseInstanceName;
         private Button newDataBaseButton;
     }
 }

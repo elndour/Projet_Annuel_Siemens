@@ -203,6 +203,11 @@ namespace Projet_Siemens
             loadform(new FormSubNetwork(this));
         }
 
+        public void OpenFileExtraction(Machine selectedMachine = null)
+        {
+            loadform(new FormFileExtraction(this, selectedMachine));
+        }
+
         public void RefreshGraphWithSubNetworks()
         {
             // Clear the current graph
@@ -582,129 +587,52 @@ namespace Projet_Siemens
                 // Create a unique ID for the new machine
                 string uniqueId = $"{machineType.Replace(" ", "")}-{DateTime.Now:HHmmss}";
 
-                // Prompt user for basic information
-                string machineId = Microsoft.VisualBasic.Interaction.InputBox(
-                    $"Enter ID for the new {machineType}:", 
-                    "Machine ID", 
-                    uniqueId);
-
-                if (string.IsNullOrWhiteSpace(machineId))
+                // Show a single-form config dialog instead of multiple InputBox prompts
+                var configWindow = new FormMachineConfig(machineType, uniqueId, "192.168.1.1");
+                if (configWindow.ShowDialog() != DialogResult.OK)
                     return;
 
                 // Check if machine with same ID already exists
-                if (network.machines.Any(m => m.id.Equals(machineId)))
+                if (network.machines.Any(m => m.id.Equals(configWindow.MachineId)))
                 {
                     MessageBox.Show("A machine with this ID already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                string ip = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Enter IP address:", 
-                    "IP Address", 
-                    "192.168.1.1");
-
-                if (string.IsNullOrWhiteSpace(ip))
-                    return;
-
-                // Create the appropriate machine type
                 Machine newMachine = null;
+                string ip = configWindow.Ip;
 
                 switch (machineType)
                 {
                     case "Database":
-                        string username = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter username:", 
-                            "Username", 
-                            "admin");
-                        string password = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter password:", 
-                            "Password", 
-                            "password");
-                        string sshPortStr = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter SSH port:", 
-                            "SSH Port", 
-                            "22");
-
-                        if (int.TryParse(sshPortStr, out int sshPort))
+                        if (!int.TryParse(configWindow.DbSshPort, out int sshPort))
                         {
-                            // Constructor: DataBase(string id, string ip, int sshPort, string password, string username, string type)
-                            newMachine = new DataBase(machineId, ip, sshPort, password, username, "DataBase");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Invalid SSH port!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("SSH Port must be an integer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
+                        newMachine = new DataBase(configWindow.MachineId, ip, sshPort, configWindow.DbPassword, configWindow.DbUsername, configWindow.DbInstanceName, "DataBase");
                         break;
 
                     case "App Server":
-                        string appDescription = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter description:", 
-                            "Description", 
-                            "Application Server");
-                        string repository = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter repository path:", 
-                            "Repository", 
-                            "/opt/app");
-                        string servicePortStr = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter service port:", 
-                            "Service Port", 
-                            "8080");
-
-                        if (int.TryParse(servicePortStr, out int servicePort))
+                        if (!int.TryParse(configWindow.AppServicePort, out int srvPort))
                         {
-                            // Constructor: ApplicationServer(string ip, int servicePort, string description, string id, string type, string repository)
-                            newMachine = new ApplicationServer(ip, servicePort, appDescription, machineId, "ApplicationServer", repository);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Invalid service port!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Service Port must be an integer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
+                        newMachine = new ApplicationServer(ip, srvPort, configWindow.AppDescription, configWindow.MachineId, "ApplicationServer", configWindow.AppRepository);
                         break;
 
                     case "Web Server":
-                        string endPoints = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter endpoints:", 
-                            "Endpoints", 
-                            "/api/v1");
-                        string api = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter API path:", 
-                            "API", 
-                            "/api");
-                        string webRepository = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter repository:", 
-                            "Repository", 
-                            "/var/www");
-
-                        // Constructor: WebServer(string id, string ip, string endPoints, string api, string type, string repository)
-                        newMachine = new WebServer(machineId, ip, endPoints, api, "WebServer", webRepository);
+                        newMachine = new WebServer(configWindow.MachineId, ip, configWindow.WebEndPoints, configWindow.WebApi, "WebServer", configWindow.WebRepository);
                         break;
 
                     case "Pres Server":
-                        string url = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter URL:", 
-                            "URL", 
-                            "http://localhost");
-                        string presServicePortStr = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter service port:", 
-                            "Service Port", 
-                            "3389");
-                        string presRepository = Microsoft.VisualBasic.Interaction.InputBox(
-                            "Enter repository:", 
-                            "Repository", 
-                            "/opt/pres");
-
-                        if (int.TryParse(presServicePortStr, out int presServicePort))
+                        if (!int.TryParse(configWindow.PresServicePort, out int pSrvPort))
                         {
-                            // Constructor: Presentation_Server(string id, string ip, int servicePort, string URL, string type, string repository)
-                            newMachine = new Presentation_Server(machineId, ip, presServicePort, url, "PresentationServer", presRepository);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Invalid service port!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Service Port must be an integer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
+                        newMachine = new Presentation_Server(configWindow.MachineId, ip, pSrvPort, configWindow.PresUrl, "PresentationServer", configWindow.PresRepository);
                         break;
                 }
 
@@ -717,7 +645,7 @@ namespace Projet_Siemens
                     // Add to graph
                     AddNodeToGraph(newMachine);
 
-                    MessageBox.Show($"{machineType} '{machineId}' created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"{machineType} '{configWindow.MachineId}' created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

@@ -136,6 +136,16 @@ namespace Projet_Siemens.Interface
 
             parentForm.addEdgeToGraph(edge);
 
+            // Si une des machines est une base de données, ouvrir le module d'extraction directement
+            if (edge.machineSource is DataBase)
+            {
+                parentForm.OpenFileExtraction(edge.machineSource);
+            }
+            else if (edge.machineTarget is DataBase)
+            {
+                parentForm.OpenFileExtraction(edge.machineTarget);
+            }
+
             // Rediriger vers Form2
             this.Close();
             parentForm.setVisible();

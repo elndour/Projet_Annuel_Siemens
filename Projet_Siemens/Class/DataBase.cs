@@ -30,12 +30,13 @@ namespace Projet_Siemens.Class
         /// <param id="id">Name of the database.</param>
         /// <param name="ip">IP of the database.</param>
         /// <param name="sshPort">SSH port of the datbase</param>
-        public DataBase(string id, string ip, int sshPort, string password, string username, string type) : base(ip, id, type)
+        public DataBase(string id, string ip, int sshPort, string password, string username, string instanceName, string type) : base(ip, id, type)
         {
 
             this.sshPort = sshPort;
             this.password = password;
             this.username = username;
+            this.instanceName = instanceName;
         }
 
 

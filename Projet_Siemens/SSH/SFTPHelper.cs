@@ -86,6 +86,92 @@ namespace Projet_Siemens.SSH
         }
 
         /// <summary>
+        /// Vérifie si un chemin distant existe
+        /// </summary>
+        public bool RemotePathExists(string remotePath)
+        {
+            try
+            {
+                if (sftpClient == null || !sftpClient.IsConnected)
+                {
+                    if (!Connect())
+                        return false;
+                }
+
+                return sftpClient.Exists(remotePath);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Crée un répertoire distant (et parents) si nécessaire
+        /// </summary>
+        public bool EnsureRemoteDirectory(string remoteDir)
+        {
+            try
+            {
+                if (sftpClient == null || !sftpClient.IsConnected)
+                {
+                    if (!Connect())
+                        return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(remoteDir))
+                    return false;
+
+                remoteDir = remoteDir.Replace('\\', '/');
+
+                if (sftpClient.Exists(remoteDir))
+                    return true;
+
+                // Tentative de création en cascade
+                string current = "/";
+                var parts = remoteDir.
+                    Trim(' ', '/').
+                    Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var part in parts)
+                {
+                    current = current.TrimEnd('/') + "/" + part;
+                    if (!sftpClient.Exists(current))
+                    {
+                        sftpClient.CreateDirectory(current);
+                    }
+                }
+
+                return sftpClient.Exists(remoteDir);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Renvoie le répertoire de travail SFTP actuel
+        /// </summary>
+        public string GetRemoteWorkingDirectory()
+        {
+            try
+            {
+                if (sftpClient == null || !sftpClient.IsConnected)
+                {
+                    if (!Connect())
+                        return null;
+                }
+
+                return sftpClient.WorkingDirectory;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Télécharge un fichier distant vers un chemin local
         /// </summary>
         public bool DownloadFile(string remoteFilePath, string localFilePath, Action<ulong> progressCallback = null)
@@ -120,6 +206,40 @@ namespace Projet_Siemens.SSH
         }
 
         /// <summary>
+        /// Upload un fichier local vers un chemin distant
+        /// </summary>
+        public bool UploadFile(string localFilePath, string remoteFilePath, Action<ulong> progressCallback = null)
+        {
+            try
+            {
+                if (sftpClient == null || !sftpClient.IsConnected)
+                {
+                    if (!Connect())
+                        return false;
+                }
+
+                // Créer le répertoire distant si nécessaire
+                string remoteDir = Path.GetDirectoryName(remoteFilePath).Replace('\\', '/');
+                if (!string.IsNullOrEmpty(remoteDir) && !sftpClient.Exists(remoteDir))
+                {
+                    sftpClient.CreateDirectory(remoteDir);
+                }
+
+                using (var fileStream = new FileStream(localFilePath, FileMode.Open))
+                {
+                    sftpClient.UploadFile(fileStream, remoteFilePath, progressCallback);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'upload de {localFilePath} :\n{ex.Message}", "Erreur SFTP", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Télécharge tous les fichiers d'un répertoire distant avec une extension spécifique
         /// </summary>
         public int DownloadFilesByExtension(string remoteDirectory, string localDirectory, string extension, Action<string, int, int> progressCallback = null)
@@ -134,10 +254,21 @@ namespace Projet_Siemens.SSH
                         return 0;
                 }
 
+                // Si le chemin contient un wildcard, l'expanser en répertoires existants.
+                if (remoteDirectory.Contains("*") || remoteDirectory.Contains("?"))
+                {
+                    var resolvedDirs = ResolveWildcardRemoteDirectories(remoteDirectory);
+                    foreach (var dir in resolvedDirs)
+                    {
+                        downloadedCount += DownloadFilesByExtension(dir, localDirectory, extension, progressCallback);
+                    }
+                    return downloadedCount;
+                }
+
                 // Vérifier que le répertoire distant existe
                 if (!sftpClient.Exists(remoteDirectory))
                 {
-                    MessageBox.Show($"Le répertoire distant n'existe pas : {remoteDirectory}", "Erreur SFTP", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    // ne pas afficher de message d'erreur si le chemin mime un wildcard
                     return 0;
                 }
 
@@ -172,6 +303,71 @@ namespace Projet_Siemens.SSH
             return downloadedCount;
         }
 
+        /// <summary>
+        /// Résout les répertoires distants à partir d'un chemin contenant des wildcards (*, ?)
+        /// </summary>
+        private List<string> ResolveWildcardRemoteDirectories(string wildcardPath)
+        {
+            var resolved = new List<string>();
+
+            string normalized = wildcardPath.Replace('\\', '/').TrimEnd('/');
+            var segments = normalized.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+            int patternIndex = Array.FindIndex(segments, s => s.Contains("*") || s.Contains("?"));
+            if (patternIndex < 0)
+            {
+                if (sftpClient.Exists(normalized))
+                    resolved.Add(normalized);
+                return resolved;
+            }
+
+            string basePath = "/" + string.Join('/', segments.Take(patternIndex));
+            if (basePath == "/") basePath = "/";
+
+            if (!sftpClient.Exists(basePath))
+                return resolved;
+
+            var parentFiles = sftpClient.ListDirectory(basePath);
+            string pattern = segments[patternIndex];
+            var matchedDirs = parentFiles
+                .Where(f => f.IsDirectory && f.Name != "." && f.Name != ".." && WildcardMatch(f.Name, pattern))
+                .Select(f => f.Name);
+
+            foreach (var dirName in matchedDirs)
+            {
+                string candidate = Path.Combine(basePath, dirName).Replace('\\', '/');
+
+                if (patternIndex < segments.Length - 1)
+                {
+                    string suffix = string.Join('/', segments.Skip(patternIndex + 1));
+                    candidate = candidate.TrimEnd('/') + "/" + suffix;
+                }
+
+                if (candidate.Contains("*") || candidate.Contains("?"))
+                {
+                    // récursion pour plusieurs wildcards
+                    resolved.AddRange(ResolveWildcardRemoteDirectories(candidate));
+                }
+                else
+                {
+                    if (sftpClient.Exists(candidate))
+                        resolved.Add(candidate);
+                }
+            }
+
+            return resolved.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// Test simple de correspondance wildcard
+        /// </summary>
+        private bool WildcardMatch(string text, string pattern)
+        {
+            string regex = "^" + System.Text.RegularExpressions.Regex.Escape(pattern)
+                .Replace("\\*", ".*")
+                .Replace("\\?", ".") + "$";
+            return System.Text.RegularExpressions.Regex.IsMatch(text, regex, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        }
         /// <summary>
         /// Liste les fichiers d'un répertoire distant avec une extension spécifique
         /// </summary>
@@ -210,7 +406,9 @@ namespace Projet_Siemens.SSH
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la liste des fichiers :\n{ex.Message}", "Erreur SFTP", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Quand un serveur distant n'accepte pas le chemin (Bad message / dossier inexistant),
+                // passer au suivant sans popup bloquant
+                Console.WriteLine($"Avertissement SFTP ListFiles ({remoteDirectory}) : {ex.Message}");
             }
 
             return files;
@@ -257,27 +455,6 @@ namespace Projet_Siemens.SSH
             }
 
             return -1;
-        }
-
-        /// <summary>
-        /// Vérifie si un chemin distant existe
-        /// </summary>
-        public bool RemotePathExists(string remotePath)
-        {
-            try
-            {
-                if (sftpClient == null || !sftpClient.IsConnected)
-                {
-                    if (!Connect())
-                        return false;
-                }
-
-                return sftpClient.Exists(remotePath);
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }

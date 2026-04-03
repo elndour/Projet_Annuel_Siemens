@@ -32,7 +32,8 @@ namespace Projet_Siemens.Interface
                 string.IsNullOrWhiteSpace(dataBaseIpAdress.Text) ||
                 string.IsNullOrWhiteSpace(dataBaseSshPort.Text) ||
                 string.IsNullOrWhiteSpace(dataBaseusername.Text) ||
-                string.IsNullOrWhiteSpace(dataBasemotdepasse.Text))
+                string.IsNullOrWhiteSpace(dataBasemotdepasse.Text) ||
+                string.IsNullOrWhiteSpace(dataBaseInstanceName.Text))
 
             {
                 MessageBox.Show("Please fill all the fields", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -54,7 +55,7 @@ namespace Projet_Siemens.Interface
             }
 
             // There is no error, we can add the database to the network and display it on the graph
-            DataBase dataBase = new DataBase(dataBaseName.Text, dataBaseIpAdress.Text, int.Parse(dataBaseSshPort.Text), dataBasemotdepasse.Text, dataBaseusername.Text, "DataBase");
+            DataBase dataBase = new DataBase(dataBaseName.Text, dataBaseIpAdress.Text, int.Parse(dataBaseSshPort.Text), dataBasemotdepasse.Text, dataBaseusername.Text, dataBaseInstanceName.Text, "DataBase");
 
             
 
@@ -86,6 +87,7 @@ namespace Projet_Siemens.Interface
             dataBaseName.Text = "";
             dataBaseIpAdress.Text = "";
             dataBaseSshPort.Text = "";
+            dataBaseInstanceName.Text = "";
 
             // Rediriger vers Form2
             this.Close();
