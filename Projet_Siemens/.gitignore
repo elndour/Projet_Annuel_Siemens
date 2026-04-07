@@ -1,0 +1,50 @@
+# Visual Studio / .NET
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.log
+
+# Rider
+.idea/
+
+# Build outputs
+*.exe
+*.dll
+*.pdb
+*.cache
+*.ilk
+*.idb
+*.meta
+*.obj
+
+# Test and local generated data
+TestData/
+**/test_files/
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.ldf
+*.ndf
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# SSH and user data
+*.pem
+*.key
+
+# Other
+*.vsix
